@@ -1,10 +1,19 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, validateSync } from 'class-validator';
+import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
 import { Environment } from '../enums';
 
 class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment;
+
+  @IsNumber()
+  SERVER_PORT: number;
+
+  @IsNumber()
+  MONGO_PORT: number;
+
+  @IsString()
+  DATABASE_URL: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

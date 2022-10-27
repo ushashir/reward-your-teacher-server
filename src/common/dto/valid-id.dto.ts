@@ -1,6 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsMongoId } from 'class-validator';
 
 export class ValidIdDto {
-  @IsNotEmpty()
+  @IsMongoId()
   id: string;
 }

@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  dev:
+    container_name: reward_your_teacher_api_dev
+    image: reward-your-teach-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - 9229:9229
+    command: yarn start:debug
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - ./database:/data/db
+    env_file:
+      - .env
+    # environment:
+    #   - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+    #   - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+    #   - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    restart: always
+  prod:
+    container_name: reward_your_teacher_api_prod
+    image: reward-your-teach-api-prod:1.0.0
+    build:
+      context: .
+      target: production
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - 9229:9229
+    command: yarn start:prod
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+networks:
+  webnet:

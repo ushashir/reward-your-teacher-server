@@ -20,7 +20,7 @@ async function bootstrap() {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
     bufferLogs: true,
   });
-  const port = process.env.port || 4000;
+  const port = process.env.port || process.env.SERVER_PORT;
   const environment = process.env.NODE_ENV as Environment;
 
   app.use(helmet());
