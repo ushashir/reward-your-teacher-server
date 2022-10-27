@@ -8,26 +8,27 @@ import { UserService } from './user.service';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Post('/')
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
+  }
+
   @Get('/')
-  getAllUsers() {
+  async getAllUsers() {
     return this.userService.getUsers();
   }
 
   @Get('/:id')
-  getUserById(@Param() { id }: ValidIdDto) {
-    return this.userService.getUserById(+id);
-  }
-
-  @Post('/')
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  async getUserById(@Param() { id }: ValidIdDto) {
+    return this.userService.getUserById(id);
   }
 
   @Patch('/:id')
-  updateUser(
+  async updateUser(
     @Param() { id }: ValidIdDto,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.updateUser(+id, updateUserDto);
+    return this.userService.updateUser(id, updateUserDto);
   }
 }

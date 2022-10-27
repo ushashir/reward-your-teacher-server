@@ -1,34 +1,33 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { GenderEnum } from 'src/common/enums';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { DbSchemas } from 'src/common/constants';
 import { CreateUserDto } from './dtos/CreateUserDto';
 import { UpdateUserDto } from './dtos/UpdateUserDto';
+import { UserDocument } from './schemas/interfaces/user.interface';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  private users = [
-    {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      gender: GenderEnum.MALE,
-    },
-    {
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Doe',
-      gender: GenderEnum.FEMALE,
-    },
-  ];
+  constructor(
+    @InjectModel(DbSchemas.user)
+    private readonly userModel: Model<UserDocument>,
+  ) {}
 
-  getUsers() {
-    this.logger.log(`Getting all users`);
-    return this.users;
+  async createUser(createUserDto: CreateUserDto) {
+    const user = await this.userModel.create(createUserDto);
+    return user;
   }
 
-  getUserById(id: number) {
-    const user = this.users.find((user) => user.id === id);
+  async getUsers() {
+    const users = await this.userModel.find();
+
+    return users;
+  }
+
+  async getUserById(id: string) {
+    const user = await this.userModel.findById(id);
 
     if (!user) {
       this.logger.error('User not found');
@@ -40,33 +39,12 @@ export class UserService {
     return user;
   }
 
-  createUser(createUserDto: CreateUserDto) {
-    const lastUser = this.users.at(-1);
-    const incrementedId = lastUser.id + 1;
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const existingUser = await this.getUserById(id);
 
-    const newUser = {
-      id: incrementedId,
-      ...createUserDto,
-    };
+    Object.assign(existingUser, updateUserDto);
 
-    this.users.push(newUser);
-
-    this.logger.log('New user created -> ', newUser);
-
-    return newUser;
-  }
-
-  updateUser(id: number, updateUserDto: UpdateUserDto) {
-    const user = this.getUserById(id);
-
-    const updatedUser = {
-      ...user,
-      ...updateUserDto,
-    };
-
-    const userIndex = this.users.findIndex((user) => user.id === id);
-
-    this.users[userIndex] = updatedUser;
+    const updatedUser = await existingUser.save();
 
     return updatedUser;
   }
