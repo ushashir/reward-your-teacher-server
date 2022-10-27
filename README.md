@@ -32,7 +32,7 @@
 $ docker-compose up dev
 ```
 
-## Local Installation (not recommended)
+## Local Installation
 
 ```bash
 $ yarn install
