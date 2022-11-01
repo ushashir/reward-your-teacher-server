@@ -4,12 +4,11 @@ import { GenderEnum } from 'src/common/enums';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  firstName: string;
+  name: string;
 
   @IsNotEmpty()
-  lastName: string;
+  email: string;
 
-  @Transform(({ value }) => value.toUpperCase())
-  @IsEnum(GenderEnum)
-  gender: GenderEnum;
+  @IsNotEmpty()
+  password: string;
 }

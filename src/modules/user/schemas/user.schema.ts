@@ -3,22 +3,20 @@ import { GenderEnum } from 'src/common/enums';
 
 export const UserSchema = new Schema(
   {
-    firstName: {
+    name: {
       type: String,
       trim: true,
       required: true,
     },
-    lastName: {
+    email: {
       type: String,
       trim: true,
       required: true,
     },
 
-    gender: {
+    password: {
       type: String,
       required: true,
-      enum: [GenderEnum.MALE, GenderEnum.FEMALE],
-      uppercase: true,
     },
   },
   {

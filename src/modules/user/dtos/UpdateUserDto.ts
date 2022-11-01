@@ -4,11 +4,11 @@ import { CreateUserDto } from './CreateUserDto';
 
 export class UpdateUserDto extends CreateUserDto {
   @IsOptional()
-  firstName: string;
+  name: string;
 
   @IsOptional()
-  lastName: string;
+  email: string;
 
   @IsOptional()
-  gender: GenderEnum;
+  password: string;
 }
