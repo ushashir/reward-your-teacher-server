@@ -1,9 +1,6 @@
-import {
-  BadRequestException,
-  ValidationError,
-  ValidationPipe,
-} from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ValidationError } from 'class-validator';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { Environment } from './common/enums';
@@ -11,7 +8,11 @@ import { Environment } from './common/enums';
 const getAllowedOrigins = (environment: Environment) => {
   //TODO: add origins for staging and production environments
 
-  return environment === Environment.DEVELOPMENT;
+  if (environment === Environment.DEVELOPMENT) {
+    return ['http://localhost:3000'];
+  }
+
+  return '*';
 };
 
 async function bootstrap() {

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LeanUser } from '../../modules/user/interfaces/user.interface';
+import { LeanUser } from 'src/modules/user/schemas/interfaces/user.interface';
 
 export const GetUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): LeanUser => {
