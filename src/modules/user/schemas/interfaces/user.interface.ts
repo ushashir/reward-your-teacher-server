@@ -7,4 +7,4 @@ export interface UserDocument extends Document {
   password: string;
 }
 
-export type LeanUser = LeanDocument<UserDocument>
+export type LeanUser = LeanDocument<UserDocument>;

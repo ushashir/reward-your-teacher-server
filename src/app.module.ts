@@ -7,6 +7,7 @@ import { AllExceptionsFilter } from './common/exceptions/';
 import { MongoDbProviderModule } from './common/providers/database/mongo/mongodb.module';
 import { CronModule } from './common/services/cron/cron.module';
 import { validateEnv } from './common/validations';
+import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { UserModule } from './modules/user/user.module';
     MongoDbProviderModule,
     UserModule,
     CronModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
