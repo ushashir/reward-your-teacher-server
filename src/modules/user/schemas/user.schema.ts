@@ -13,7 +13,6 @@ export const UserSchema = new Schema(
       trim: true,
       required: true,
     },
-
     gender: {
       type: String,
       required: true,
