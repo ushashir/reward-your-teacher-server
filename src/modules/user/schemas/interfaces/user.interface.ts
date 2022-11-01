@@ -1,5 +1,4 @@
 import { LeanDocument } from 'mongoose';
-import { GenderEnum } from 'src/common/enums';
 
 export interface UserDocument extends Document {
   name: string;

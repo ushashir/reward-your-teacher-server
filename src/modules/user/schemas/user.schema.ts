@@ -1,5 +1,4 @@
 import { Schema } from 'mongoose';
-import { GenderEnum } from 'src/common/enums';
 
 export const UserSchema = new Schema(
   {
@@ -12,6 +11,7 @@ export const UserSchema = new Schema(
       type: String,
       trim: true,
       required: true,
+      unique: true
     },
 
     password: {
