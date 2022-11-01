@@ -20,7 +20,8 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
-    const passwordHash = bcrypt.hashSync(createUserDto.password, 8)
+    const saltOrRounds = 10;
+    const passwordHash = await bcrypt.hash(createUserDto.password, saltOrRounds)
     const user =  await this.userModel.create({ ...createUserDto, password: passwordHash });
     return {
       message: 'User successfully created',

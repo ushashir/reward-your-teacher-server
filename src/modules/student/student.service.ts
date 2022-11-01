@@ -17,7 +17,8 @@ export class StudentService {
     ) {}
 
     async createStudent(createStudentDto: CreateStudentDto) {
-        const passwordHash = bcrypt.hashSync(createStudentDto.password, 8)
+        const saltOrRounds = 10;
+        const passwordHash = await bcrypt.hash(createStudentDto.password, saltOrRounds)
         const student = await this.studentModel.create({ ...createStudentDto, password: passwordHash });
         return {
             message: 'Student successfully created',
