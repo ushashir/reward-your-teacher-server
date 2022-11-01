@@ -2,7 +2,6 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from 'src/common/constants';
-// import bcrypt from 'bcryptjs';
 import * as bcrypt from 'bcrypt'
 import { CreateUserDto } from './dtos/CreateUserDto';
 import { UpdateUserDto } from './dtos/UpdateUserDto';
@@ -22,7 +21,11 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto) {
     const passwordHash = bcrypt.hashSync(createUserDto.password, 8)
-    return this.userModel.create({ ...createUserDto, password: passwordHash });
+    const user =  await this.userModel.create({ ...createUserDto, password: passwordHash });
+    return {
+      message: 'User successfully created',
+      user
+    }
   }
 
   async getUsers() {
@@ -47,12 +50,18 @@ export class UserService {
 
     const updatedUser = await existingUser.save();
 
-    return updatedUser;
+    return {
+      message: 'User record updated successfully',
+      updatedUser
+    };
   }
 
   async deleteUser(id: string) {
     const user = await this.getUserById(id);
-
-    return user.remove();
+    user.remove();
+    return {
+      message: `User ${id} successfully deleted`,
+      user
+    }
   }
 }
