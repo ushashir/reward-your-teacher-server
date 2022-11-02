@@ -2,8 +2,11 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
 import helmet from 'helmet';
+import * as dotenv from 'dotenv' 
 import { AppModule } from './app.module';
 import { Environment } from './common/enums';
+dotenv.config();
+
 
 const getAllowedOrigins = (environment: Environment) => {
   //TODO: add origins for staging and production environments

@@ -1,3 +1,4 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
@@ -16,6 +17,16 @@ import { UserModule } from './modules/user/user.module';
       isGlobal: true,
       cache: true,
       validate: validateEnv,
+    }),
+    
+    MailerModule.forRoot({
+     transport :{
+       host: '',
+       auth: {
+         user: '',
+         pass: '',
+       }
+     } 
     }),
     MongoDbProviderModule,
     UserModule,
