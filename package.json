@@ -27,6 +27,7 @@
     "*.+(json|css|md)": "prettier --write"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
@@ -38,6 +39,7 @@
     "class-validator": "^0.13.2",
     "helmet": "^6.0.0",
     "mongoose": "^6.7.0",
+    "nodemailer": "^6.8.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
