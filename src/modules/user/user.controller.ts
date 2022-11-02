@@ -7,7 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ValidIdDto } from 'src/common/dto';
+import { ValidIdDto } from '../../common/dto';
 import { CreateUserDto } from './dtos/CreateUserDto';
 import { UpdateUserDto } from './dtos/UpdateUserDto';
 import { UserService } from './user.service';

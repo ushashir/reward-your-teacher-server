@@ -1,11 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DbSchemas, ErrorMessages } from 'src/common/constants';
+import { DbSchemas, ErrorMessages } from '../../common/constants';
 import * as bcrypt from 'bcrypt'
 import { CreateUserDto } from './dtos/CreateUserDto';
 import { UpdateUserDto } from './dtos/UpdateUserDto';
-import { UserDocument } from './schemas/interfaces/user.interface';
+import { UserDocument } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {

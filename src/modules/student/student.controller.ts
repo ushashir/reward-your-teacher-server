@@ -7,7 +7,7 @@ import {
     Post,
   } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
-import { ValidIdDto } from 'src/common/dto';
+import { ValidIdDto } from '../../common/dto';
 import { CreateStudentDto } from './dtos/CreateStudentDto';
 import { UpdateStudentDto } from './dtos/UpdateStudentDto';
 import { StudentService } from './student.service';

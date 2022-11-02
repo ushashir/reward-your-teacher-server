@@ -1,10 +1,10 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DbSchemas, ErrorMessages } from 'src/common/constants';
+import { DbSchemas, ErrorMessages } from '../../common/constants';
 import * as bcrypt from 'bcrypt'
 import { CreateStudentDto } from './dtos/CreateStudentDto';
-import { StudentDocument } from './schemas/interfaces/student.interface';
+import { StudentDocument } from './interfaces/student.interface';
 import { UpdateStudentDto } from './dtos/UpdateStudentDto';
 
 @Injectable()
