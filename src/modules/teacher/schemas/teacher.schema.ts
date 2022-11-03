@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-export const UserSchema = new Schema(
+export const TeacherSchema = new Schema(
   {
     name: {
       type: String,

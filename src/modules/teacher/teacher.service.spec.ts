@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { TeacherService } from './teacher.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { DbSchemas } from '../../common/constants';
 
-describe('UserService', () => {
-  let service: UserService;
+describe('TeacherService', () => {
+  let service: TeacherService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService,
-        { provide: getModelToken(DbSchemas.user), useValue: jest.fn() },
+      providers: [TeacherService,
+        { provide: getModelToken(DbSchemas.teacher), useValue: jest.fn() },
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get<TeacherService>(TeacherService);
   });
 
   it('should be defined', () => {

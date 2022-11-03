@@ -1,8 +1,8 @@
 import { IsOptional } from 'class-validator';
 import { GenderEnum } from 'src/common/enums';
-import { CreateUserDto } from './CreateUserDto';
+import { CreateTeacherDto } from './CreateTeacherDto';
 
-export class UpdateUserDto extends CreateUserDto {
+export class UpdateTeacherDto extends CreateTeacherDto {
   @IsOptional()
   name: string;
 
