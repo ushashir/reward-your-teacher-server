@@ -8,7 +8,8 @@ import { MongoDbProviderModule } from './common/providers/database/mongo/mongodb
 import { CronModule } from './common/services/cron/cron.module';
 import { validateEnv } from './common/validations';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
+import { TeacherModule } from './modules/teacher/teacher.module';
+import { StudentModule } from './modules/student/student.module';
 
 @Module({
   imports: [
@@ -18,9 +19,10 @@ import { UserModule } from './modules/user/user.module';
       validate: validateEnv,
     }),
     MongoDbProviderModule,
-    UserModule,
+    TeacherModule,
     CronModule,
     AuthModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [
