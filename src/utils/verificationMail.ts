@@ -1,6 +1,6 @@
 export function emailVerificationView(token: string): string {
     const link = `http://localhost:4000/api/welcome/verify/${token}`;
-    let temp = `
+    let template = `
        <div style="max-width: 700px;text-align: center; text-transform: uppercase;
        margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
        <h2 style="color: teal;">Welcome to Reward your teacher platform</h2>
@@ -14,6 +14,6 @@ export function emailVerificationView(token: string): string {
         </div>
      </div>
         `;
-    return temp;
+    return template;
   }
   
