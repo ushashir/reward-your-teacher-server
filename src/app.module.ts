@@ -12,7 +12,6 @@ import { UserModule } from './modules/user/user.module';
 // import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
-import { ProfileModule } from './modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { ProfileModule } from './modules/profile/profile.module';
     MongoDbProviderModule,
     CronModule,
     AuthModule,
-    ProfileModule,
     UserModule,
   ],
   controllers: [AppController],
