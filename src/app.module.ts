@@ -22,10 +22,10 @@ import { JwtService } from '@nestjs/jwt';
       validate: validateEnv,
     }),
     MongoDbProviderModule,
-    UserModule,
     CronModule,
     AuthModule,
     ProfileModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

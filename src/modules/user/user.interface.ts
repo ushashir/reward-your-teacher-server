@@ -1,9 +1,11 @@
 import { LeanDocument } from 'mongoose';
-import { GenderEnum } from 'src/common/enums';
+import { UserRolesEnum } from '../../common/enums';
 
 export interface UserDocument extends Document {
-  email: string
+  name: string;
+  email: string;
   password: string;
+  userType: UserRolesEnum;
 }
 
 export type LeanUser = LeanDocument<UserDocument>;

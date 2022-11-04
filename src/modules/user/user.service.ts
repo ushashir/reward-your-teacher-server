@@ -1,59 +1,53 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DbSchemas, ErrorMessages } from 'src/common/constants';
+import { DbSchemas, ErrorMessages } from '../../common/constants';
+import { UserRolesEnum } from '../../common/enums';
 import { CreateUserDto } from './dtos/CreateUserDto';
-import { UpdateUserDto } from './dtos/UpdateUserDto';
-import { UserDocument } from './schemas/interfaces/user.interface';
+import { UserDocument } from './user.interface';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(UserService.name);
-
   constructor(
-    // @InjectModel(DbSchemas.user)
-    // private readonly userModel: Model<UserDocument>,
-
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
   ) {}
 
+  async getUserByEmail(email: string) {
+    return this.userModel.findOne({
+      email: {
+        $regex: email,
+        $options: 'i',
+      },
+    }).select('+password') as unknown as CreateUserDto;
+  }
+
   async createUser(createUserDto: CreateUserDto) {
-    return this.userModel.create(createUserDto);
-  }
+    const userExist = await this.getUserByEmail(createUserDto.email);
 
-  async getUsers() {
-    return this.userModel.find();
-  }
-
-  async getUserById(id: string) {
-    const user = await this.userModel.findById(id);
-
-    if (!user) {
-      this.logger.error('User not found');
-      throw new NotFoundException(ErrorMessages.noUser(id));
+    if (userExist) {
+      throw new BadRequestException(ErrorMessages.USER_EXISTS);
     }
 
-    return user;
+    const createdUser = await this.userModel.create({
+      ...createUserDto,
+    });
+
+    const createdUserObject = createdUser.toObject();
+
+    delete createdUserObject.password;
+
+    return {
+      message: `${
+        createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
+      } successfully created`,
+      [createUserDto.userType.toLowerCase()]: createdUserObject,
+    };
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const existingUser = await this.getUserById(id);
-
-    Object.assign(existingUser, updateUserDto);
-
-    const updatedUser = await existingUser.save();
-
-    return updatedUser;
-  }
-
-  async deleteUser(id: string) {
-    const user = await this.getUserById(id);
-
-    return user.remove();
-  }
-
-  async findUserByEmail(email: string) {
-    return this.userModel.findOne({ email });
-  }
+  // async findUserByEmail(email: string) {
+  //   return this.userModel.findOne({ email }).select('+password').exec(function (err, user){
+  //     return user
+  //   });
+  // }
 }
