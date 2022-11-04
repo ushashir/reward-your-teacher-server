@@ -9,7 +9,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   lastName: string;
 
+  @IsNotEmpty()
+  email: string;
+
   @Transform(({ value }) => value.toUpperCase())
   @IsEnum(GenderEnum)
   gender: GenderEnum;
+
+  @IsNotEmpty()
+  password: string;
 }

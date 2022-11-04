@@ -13,12 +13,22 @@ export const UserSchema = new Schema(
       trim: true,
       required: true,
     },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
     gender: {
       type: String,
       required: true,
       enum: [GenderEnum.MALE, GenderEnum.FEMALE],
       uppercase: true,
     },
+    password: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,

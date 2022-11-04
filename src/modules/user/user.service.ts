@@ -52,4 +52,8 @@ export class UserService {
 
     return user.remove();
   }
+
+  async findUserByEmail(email: string) {
+    return this.userModel.findOne({ email });
+  }
 }
