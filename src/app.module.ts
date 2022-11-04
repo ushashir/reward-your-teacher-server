@@ -9,6 +9,10 @@ import { CronModule } from './common/services/cron/cron.module';
 import { validateEnv } from './common/validations';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+// import { AuthService } from './auth/auth.service';
+import { ProfileModule } from './modules/profile/profile.module';
+import { AuthService } from './modules/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -20,6 +24,7 @@ import { UserModule } from './modules/user/user.module';
     MongoDbProviderModule,
     CronModule,
     AuthModule,
+    ProfileModule,
     UserModule,
   ],
   controllers: [AppController],
@@ -29,6 +34,8 @@ import { UserModule } from './modules/user/user.module';
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    AuthService,
+    JwtService
   ],
 })
 export class AppModule {}

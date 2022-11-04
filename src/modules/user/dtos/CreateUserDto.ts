@@ -6,7 +6,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserRolesEnum } from '../../../common/enums';
+import { GenderEnum, UserRolesEnum } from '../../../common/enums';
 
 export class CreateUserDto {
   @IsNotEmpty()

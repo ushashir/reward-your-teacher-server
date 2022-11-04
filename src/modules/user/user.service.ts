@@ -19,7 +19,7 @@ export class UserService {
         $regex: email,
         $options: 'i',
       },
-    });
+    }).select('+password') as unknown as CreateUserDto;
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -44,4 +44,10 @@ export class UserService {
       [createUserDto.userType.toLowerCase()]: createdUserObject,
     };
   }
+
+  // async findUserByEmail(email: string) {
+  //   return this.userModel.findOne({ email }).select('+password').exec(function (err, user){
+  //     return user
+  //   });
+  // }
 }
