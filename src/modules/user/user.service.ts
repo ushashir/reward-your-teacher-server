@@ -14,12 +14,14 @@ export class UserService {
   ) {}
 
   async getUserByEmail(email: string) {
-    return this.userModel.findOne({
-      email: {
-        $regex: email,
-        $options: 'i',
-      },
-    }).select('+password') as unknown as CreateUserDto;
+    return this.userModel
+      .findOne({
+        email: {
+          $regex: email,
+          $options: 'i',
+        },
+      })
+      .select('+password');
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -45,9 +47,13 @@ export class UserService {
     };
   }
 
-  // async findUserByEmail(email: string) {
-  //   return this.userModel.findOne({ email }).select('+password').exec(function (err, user){
-  //     return user
-  //   });
-  // }
+  async getUserById(id: string) {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new BadRequestException(ErrorMessages.userNotFound(id));
+    }
+
+    return user;
+  }
 }
