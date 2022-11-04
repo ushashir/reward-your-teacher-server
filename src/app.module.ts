@@ -18,16 +18,6 @@ import { UserModule } from './modules/user/user.module';
       cache: true,
       validate: validateEnv,
     }),
-    
-    MailerModule.forRoot({
-     transport :{
-       host: '',
-       auth: {
-         user: '',
-         pass: '',
-       }
-     } 
-    }),
     MongoDbProviderModule,
     CronModule,
     AuthModule,
