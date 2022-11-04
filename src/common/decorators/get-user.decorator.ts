@@ -1,10 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LeanTeacher } from 'src/modules/teacher/interfaces/teacher.interface';
+import { LeanUser } from '../../modules/user/user.interface';
 
 export const GetUser = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext): LeanTeacher => {
+  (data: unknown, ctx: ExecutionContext): LeanUser => {
     const request = ctx.switchToHttp().getRequest();
 
-    return request.teacher as LeanTeacher;
+    return request.user;
   },
 );
