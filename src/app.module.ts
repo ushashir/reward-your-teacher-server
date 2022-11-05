@@ -10,6 +10,9 @@ import { CronModule } from './common/services/cron/cron.module';
 import { validateEnv } from './common/validations';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+// import { AuthService } from './auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from './modules/auth/services/auth.service';
 
 @Module({
   imports: [
@@ -30,6 +33,8 @@ import { UserModule } from './modules/user/user.module';
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    AuthService,
+    JwtService,
   ],
 })
 export class AppModule {}

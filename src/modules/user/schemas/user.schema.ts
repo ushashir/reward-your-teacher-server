@@ -19,12 +19,12 @@ export const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
       select: false,
     },
     userType: {
       type: String,
-      required: true,
+      // required: true, // because during google signup we won't know yet who you are
       enum: [UserRolesEnum.TEACHER, UserRolesEnum.STUDENT],
       uppercase: true,
     },

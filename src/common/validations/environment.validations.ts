@@ -14,6 +14,15 @@ class EnvironmentVariables {
 
   @IsString()
   DATABASE_URL: string;
+
+  @IsString()
+  JWT_SECRET: string;
+
+  @IsNumber()
+  JWT_ACCESS_TOKEN_TTL: number;
+
+  @IsNumber()
+  JWT_REFRESH_TOKEN_TTL: number;
 }
 
 export function validateEnv(config: Record<string, unknown>) {
