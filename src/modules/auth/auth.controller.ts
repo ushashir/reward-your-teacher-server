@@ -4,18 +4,19 @@ import {
   Get,
   Headers,
   Post,
-  Req,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from '../user/dtos/CreateUserDto';
+import { Response } from 'express';
+import { GetUser } from '../../common/decorators';
 import { RefreshTokenDto } from '../user/dtos/RefreshTokenDto';
-import { UserDocument } from '../user/user.interface';
+import { CreateUserDto } from '../user/dtos/UserDto';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthPayload } from './interfaces/auth.interface';
 import { AuthService } from './services/auth.service';
-import { Request } from 'express';
-import { GoogleAuthGuard } from './utils/Guards';
 
 @Controller('auth')
 export class AuthController {
@@ -41,29 +42,24 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
-  getProfile(@Request() req: Request & { user: UserDocument }) {
-    return req.user;
+  getProfile(@GetUser() user) {
+    return user;
   }
 
-  @Get('google/login')
+  @Get('/google')
   @UseGuards(GoogleAuthGuard)
-  handlelogin() {
-    return { msg: 'Google Authentication' };
+  googleLogin() {
+    // Nothing
   }
 
-  // api/auth/google/redirect
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
-  handleRedirect() {
-    return { msg: 'OK' };
-  }
+  googleAuthRedirect(
+    @Request() req: Request & { user: AuthPayload },
+    @Res() res: Response,
+  ) {
+    const authPayload = req.user;
 
-  @Get('status')
-  user(@Req() request: Request) {
-    console.log(request.user);
-    if (request.user) {
-      return { msg: 'Authenticated' };
-    } else {
-      return { msg: 'Not Authenticated' };
-    }}
+    this.authService.googleLogin(authPayload, res);
+  }
 }

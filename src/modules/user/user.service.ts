@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
-import { CreateUserDto } from './dtos/CreateUserDto';
+import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
 
 @Injectable()
@@ -43,7 +43,7 @@ export class UserService {
       message: `${
         createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
       } successfully created`,
-      [createUserDto.userType.toLowerCase()]: createdUserObject,
+      user: createdUserObject,
     };
   }
 
@@ -55,5 +55,19 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async updateMyProfile(user: UserDocument, updateUserDto: UpdateUserDto) {
+    if (updateUserDto?.email && updateUserDto.email !== user.email) {
+      const userExist = await this.getUserByEmail(updateUserDto.email);
+
+      if (userExist) {
+        throw new BadRequestException(ErrorMessages.USER_EXISTS);
+      }
+    }
+
+    return this.userModel.findByIdAndUpdate(user._id, updateUserDto, {
+      new: true,
+    });
   }
 }

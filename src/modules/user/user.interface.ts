@@ -6,7 +6,7 @@ export interface UserDocument extends Document {
   name: string;
   email: string;
   password: string;
-  userType: UserRolesEnum;
+  userType?: UserRolesEnum;
 }
 
 export type LeanUser = LeanDocument<UserDocument>;
