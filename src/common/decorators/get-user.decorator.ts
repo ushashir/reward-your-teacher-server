@@ -1,10 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LeanUser } from '../../modules/user/user.interface';
+import { UserDocument } from '../../modules/user/user.interface';
 
 export const GetUser = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext): LeanUser => {
+  (data: unknown, ctx: ExecutionContext): UserDocument => {
     const request = ctx.switchToHttp().getRequest();
 
-    return request.user;
+    return request.user as UserDocument;
   },
 );

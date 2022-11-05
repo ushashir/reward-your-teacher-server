@@ -9,12 +9,11 @@ import { AuthController } from './auth.controller';
 import { RefreshTokenSchema } from './schema/refresh-token.schema';
 import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, TokenService],
   imports: [
     UserModule,
     PassportModule,
@@ -35,6 +34,14 @@ import { LocalStrategy } from './strategies/local.strategy';
       },
     ]),
   ],
-  exports: [TokenService],
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    TokenService,
+    GoogleStrategy,
+  ],
+  exports: [TokenService, AuthService],
 })
 export class AuthModule {}

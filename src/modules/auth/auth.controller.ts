@@ -5,13 +5,17 @@ import {
   Headers,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from '../user/dtos/CreateUserDto';
+import { Response } from 'express';
+import { GetUser } from '../../common/decorators';
 import { RefreshTokenDto } from '../user/dtos/RefreshTokenDto';
-import { UserDocument } from '../user/user.interface';
+import { CreateUserDto } from '../user/dtos/UserDto';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthPayload } from './interfaces/auth.interface';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')
@@ -38,7 +42,24 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
-  getProfile(@Request() req: Request & { user: UserDocument }) {
-    return req.user;
+  getProfile(@GetUser() user) {
+    return user;
+  }
+
+  @Get('/google')
+  @UseGuards(GoogleAuthGuard)
+  googleLogin() {
+    // Nothing
+  }
+
+  @Get('google/redirect')
+  @UseGuards(GoogleAuthGuard)
+  googleAuthRedirect(
+    @Request() req: Request & { user: AuthPayload },
+    @Res() res: Response,
+  ) {
+    const authPayload = req.user;
+
+    this.authService.googleLogin(authPayload, res);
   }
 }

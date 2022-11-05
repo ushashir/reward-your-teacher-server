@@ -12,3 +12,11 @@ export interface JwtPayload {
   sub: UserDocument['_id'];
   jwtid: RefreshTokenDocument['_id'];
 }
+
+export interface AuthPayload {
+  message: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user?: UserDocument;
+}
