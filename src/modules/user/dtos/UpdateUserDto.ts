@@ -11,4 +11,7 @@ export class UpdateUserDto extends CreateUserDto {
 
   @IsOptional()
   gender: GenderEnum;
+
+  @IsOptional()
+  pass: string;
 }

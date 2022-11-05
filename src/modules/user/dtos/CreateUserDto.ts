@@ -1,15 +1,25 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { GenderEnum } from 'src/common/enums';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { UserRolesEnum } from '../../../common/enums';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  firstName: string;
+  @IsString()
+  name: string;
 
-  @IsNotEmpty()
-  lastName: string;
+  @IsEmail()
+  email: string;
+
+  @MinLength(6)
+  password: string;
 
   @Transform(({ value }) => value.toUpperCase())
-  @IsEnum(GenderEnum)
-  gender: GenderEnum;
+  @IsEnum(UserRolesEnum)
+  userType: UserRolesEnum;
 }
