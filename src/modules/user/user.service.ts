@@ -7,8 +7,8 @@ import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
 import { welcomeEmail } from 'src/common/mailSender/welcomeTemplate';
 import mailer from 'src/common/mailSender/sendMail' 
-const fromUser = process.env.FROM as string;
-const jwtsecret = process.env.JWT_SECRET as string;
+const fromUser = process.env.FROM;
+const jwtsecret = process.env.JWT_SECRETS ;
 
 
 @Injectable()
