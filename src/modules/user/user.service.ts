@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Body, Injectable, Req } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
+import { welcomeEmail } from 'src/common/mailSender/welcomeTemplate';
+import mailer from 'src/common/mailSender/sendMail' 
+const fromUser = process.env.FROM;
+const jwtsecret = process.env.JWT_SECRETS ;
+
 
 @Injectable()
 export class UserService {
@@ -38,6 +43,12 @@ export class UserService {
     const createdUserObject = createdUser.toObject();
 
     delete createdUserObject.password;
+    
+    if(createdUserObject){
+      const subject = 'Welcome message';
+      const mail = welcomeEmail(createUserDto.name, createUserDto.email);
+      await mailer.sendEmail(fromUser, Req.name, subject, mail);
+    }
 
     return {
       message: `${

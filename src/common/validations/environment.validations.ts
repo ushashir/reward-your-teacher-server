@@ -1,6 +1,8 @@
 import { plainToClass } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
 import { Environment } from '../enums';
+import * as dotenv from 'dotenv' 
+dotenv.config();
 
 class EnvironmentVariables {
   @IsEnum(Environment)
