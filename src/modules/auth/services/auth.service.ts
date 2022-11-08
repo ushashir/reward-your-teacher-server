@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 // import { UserDocument } from '../user/schemas/interfaces/user.interface';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import { RefreshTokenDto } from '../../user/dtos/RefreshTokenDto';
 import { CreateUserDto } from '../../user/dtos/UserDto';
@@ -21,6 +21,7 @@ export class AuthService {
   async signup(createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
+
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.getUserByEmail(email);
