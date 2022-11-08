@@ -1,7 +1,6 @@
 import { UserRolesEnum } from "../enums";
 
 export function welcomeEmail(name: string, email: string): string {
-    // const link = `http://localhost:5000/api-v1/student/verify/${token}`;
     let temp = `
        <div style="max-width: 700px;text-align: center; text-transform: uppercase;
        margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">

@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { CallbackWithoutResultAndOptionalError, Schema } from 'mongoose';
 import { UserRolesEnum } from '../../../common/enums';
 
