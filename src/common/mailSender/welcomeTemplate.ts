@@ -1,7 +1,5 @@
-import { UserRolesEnum } from "../enums";
-
 export function welcomeEmail(name: string, email: string): string {
-    let temp = `
+  const temp = `
        <div style="max-width: 700px;text-align: center; text-transform: uppercase;
        margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
        <h2 style="color: teal;">Welcome to Reward Your Teacher Platform</h2>
@@ -16,6 +14,5 @@ export function welcomeEmail(name: string, email: string): string {
         </div>
      </div>
         `;
-    return temp;
-  }
-  
+  return temp;
+}
