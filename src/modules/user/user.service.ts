@@ -7,6 +7,7 @@ import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
 import { welcomeEmail } from 'src/common/mailSender/welcomeTemplate';
 import mailer from 'src/common/mailSender/sendMail' 
+import { WalletService } from '../wallet/wallet.service';
 const fromUser = process.env.FROM;
 const jwtsecret = process.env.JWT_SECRETS ;
 
@@ -16,6 +17,7 @@ export class UserService {
   constructor(
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
+    readonly walletService: WalletService,
   ) {}
 
   async getUserByEmail(email: string) {
@@ -43,12 +45,18 @@ export class UserService {
     const createdUserObject = createdUser.toObject();
 
     delete createdUserObject.password;
-    
-    if(createdUserObject){
-      const subject = 'Welcome message';
-      const mail = welcomeEmail(createUserDto.name, createUserDto.email);
-      await mailer.sendEmail(fromUser, Req.name, subject, mail);
+
+    const createWallet = await this.walletService.createWallet(createdUser)
+
+    if(!createWallet){
+      throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
     }
+    
+    // if(createdUserObject){
+    //   const subject = 'Welcome message';
+    //   const mail = welcomeEmail(createUserDto.name, createUserDto.email);
+    //   await mailer.sendEmail(fromUser, Req.name, subject, mail);
+    // }
 
     return {
       message: `${

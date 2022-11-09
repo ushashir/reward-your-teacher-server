@@ -13,6 +13,7 @@ import { UserModule } from './modules/user/user.module';
 // import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AuthService } from './modules/auth/services/auth.service';
     CronModule,
     AuthModule,
     UserModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [
