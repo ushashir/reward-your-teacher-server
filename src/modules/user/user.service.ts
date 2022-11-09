@@ -51,13 +51,7 @@ export class UserService {
     if(!createWallet){
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
     }
-    
-    // if(createdUserObject){
-    //   const subject = 'Welcome message';
-    //   const mail = welcomeEmail(createUserDto.name, createUserDto.email);
-    //   await mailer.sendEmail(fromUser, Req.name, subject, mail);
-    // }
-
+  
     return {
       message: `${
         createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
