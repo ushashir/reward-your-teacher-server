@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
+import * as dotenv from 'dotenv';
 import { Environment } from '../enums';
-import * as dotenv from 'dotenv' 
 dotenv.config();
 
 class EnvironmentVariables {
@@ -25,6 +25,27 @@ class EnvironmentVariables {
 
   @IsNumber()
   JWT_REFRESH_TOKEN_TTL: number;
+
+  @IsString()
+  GOOGLE_CLIENT_ID: string;
+
+  @IsString()
+  GOOGLE_CLIENT_SECRET: string;
+
+  @IsString()
+  BASE_URL: string;
+
+  @IsString()
+  FRONTEND_URL: string;
+
+  @IsString()
+  GMAIL_USER: string;
+
+  @IsString()
+  GMAIL_PASS: string;
+
+  @IsString()
+  FROM: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

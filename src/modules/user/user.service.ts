@@ -1,16 +1,14 @@
-import { BadRequestException, Body, Injectable, Req } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
+import { MailService } from '../mail/mail.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
-import { welcomeEmail } from 'src/common/mailSender/welcomeTemplate';
-import mailer from 'src/common/mailSender/sendMail' 
 import { WalletService } from '../wallet/wallet.service';
 const fromUser = process.env.FROM;
-const jwtsecret = process.env.JWT_SECRETS ;
-
+const jwtsecret = process.env.JWT_SECRETS;
 
 @Injectable()
 export class UserService {
@@ -18,6 +16,7 @@ export class UserService {
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
     readonly walletService: WalletService,
+    private readonly mailService: MailService,
   ) {}
 
   async getUserByEmail(email: string) {
@@ -42,15 +41,20 @@ export class UserService {
       ...createUserDto,
     });
 
-    const createdUserObject = createdUser.toObject();
-
-    delete createdUserObject.password;
-
     const createWallet = await this.walletService.createWallet(createdUser)
 
     if(!createWallet){
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
     }
+
+    const createdUserObject = createdUser.toObject();
+
+    delete createdUserObject.password;
+
+    this.mailService.sendWelcomeEmail(
+      createdUserObject.email,
+      createdUserObject.name,
+    );
   
     return {
       message: `${
