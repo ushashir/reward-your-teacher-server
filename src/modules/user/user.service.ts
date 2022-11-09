@@ -44,7 +44,7 @@ export class UserService {
 
     delete createdUserObject.password;
     
-    if(createdUserObject){
+    if(createdUser){
       const subject = 'Welcome message';
       const mail = welcomeEmail(createUserDto.name, createUserDto.email);
       await mailer.sendEmail(fromUser, Req.name, subject, mail);
