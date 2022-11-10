@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 // import { UserDocument } from '../user/schemas/interfaces/user.interface';
 import * as bcrypt from 'bcryptjs';
 import { Response } from 'express';
+import { ErrorMessages } from '../../../common/constants';
 import { RefreshTokenDto } from '../../user/dtos/RefreshTokenDto';
 import { CreateUserDto } from '../../user/dtos/UserDto';
 import { UserDocument } from '../../user/user.interface';
@@ -25,6 +26,10 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.getUserByEmail(email);
+
+    if (!user) {
+      throw new BadRequestException(ErrorMessages.userEmailNotFound(email));
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
 

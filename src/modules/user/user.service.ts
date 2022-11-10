@@ -6,6 +6,7 @@ import { UserRolesEnum } from '../../common/enums';
 import { MailService } from '../mail/mail.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { UserDocument } from './user.interface';
+import { WalletService } from '../wallet/wallet.service';
 const fromUser = process.env.FROM;
 const jwtsecret = process.env.JWT_SECRETS;
 
@@ -14,6 +15,7 @@ export class UserService {
   constructor(
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
+    readonly walletService: WalletService,
     private readonly mailService: MailService,
   ) {}
 
@@ -39,6 +41,12 @@ export class UserService {
       ...createUserDto,
     });
 
+    const createWallet = await this.walletService.createWallet(createdUser)
+
+    if(!createWallet){
+      throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
+    }
+
     const createdUserObject = createdUser.toObject();
 
     delete createdUserObject.password;
@@ -47,7 +55,7 @@ export class UserService {
       createdUserObject.email,
       createdUserObject.name,
     );
-
+  
     return {
       message: `${
         createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
