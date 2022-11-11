@@ -12,6 +12,8 @@ import { UserModule } from './modules/user/user.module';
 // import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
+import { PaymentModule } from './modules/payment/payment.module';
+import { PaymentController } from './modules/payment/payment.controller';
 
 @Module({
   imports: [
@@ -24,8 +26,9 @@ import { AuthService } from './modules/auth/services/auth.service';
     CronModule,
     AuthModule,
     UserModule,
+    PaymentModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, PaymentController],
   providers: [
     AppService,
     {
