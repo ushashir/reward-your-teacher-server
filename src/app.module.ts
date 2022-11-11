@@ -12,7 +12,7 @@ import { UserModule } from './modules/user/user.module';
 // import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
-import { PaymentModule } from './modules/payment/payment.module';
+import { WalletModule } from './modules/wallet/wallet.module';
 import { PaymentController } from './modules/payment/payment.controller';
 
 @Module({
@@ -26,7 +26,7 @@ import { PaymentController } from './modules/payment/payment.controller';
     CronModule,
     AuthModule,
     UserModule,
-    PaymentModule,
+    WalletModule,
   ],
   controllers: [AppController, PaymentController],
   providers: [
