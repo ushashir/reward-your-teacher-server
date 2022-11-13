@@ -10,7 +10,9 @@ export const WalletSchema = new Schema({
     default: 0.0
   },
   totalMoneyRecieved: {
-    type: Number,
-    default: 0.0
+    type: Number
+  },
+  userType: {
+    type: String
   }
 });
