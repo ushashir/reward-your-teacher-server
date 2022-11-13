@@ -9,4 +9,8 @@ export const WalletSchema = new Schema({
     type: Number,
     default: 0.0
   },
+  totalMoneyRecieved: {
+    type: Number,
+    default: 0.0
+  }
 });

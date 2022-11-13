@@ -18,4 +18,10 @@ export class WalletController {
     withdraw(@Request() req: any, @GetUser() user){
         return this.walletService.withdraw(req.body.amount, user.id)
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/deposit')
+    sendMoney(@Request() req: any, @GetUser() user){
+        return this.walletService.sendMoney(req.body.amount, req.body.destination, user.id)
+    }
 }

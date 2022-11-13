@@ -52,5 +52,42 @@ export class WalletService {
             message: `Withdrawal of ${amount} successful`
         }
     }
-    
+
+    async sendMoney(amount: number, destination: string, id: string){
+        const sender = await this.walletModel.findOne({userId: id})
+        const reciever = await this.walletModel.findOne({userId: destination})
+        
+        if(!sender || !reciever || destination === id){
+            throw new BadRequestException(ErrorMessages.INVALID_REQUEST);
+        }
+
+        const { balance } = sender
+        const recieverBalance = reciever.balance
+
+        if(amount <= 0){
+            throw new BadRequestException(ErrorMessages.INVALID_WITHDRAWAL_AMOUNT);
+        }
+        if(amount > balance){
+            throw new BadRequestException(ErrorMessages.INSUFFICIENT_FUND);
+        }
+
+        const senderNewBalance = balance - amount
+        const recieverNewBalance = recieverBalance + amount
+
+        await this.walletModel.findByIdAndUpdate(sender._id, {
+            balance: senderNewBalance
+        })
+
+        const recieversTotalMoneyRecieved = reciever.totalMoneyRecieved + amount
+
+        await this.walletModel.findByIdAndUpdate(reciever._id, {
+            balance: recieverNewBalance,
+            totalMoneyRecieved: recieversTotalMoneyRecieved
+        })
+
+        return {
+            message: `Transfer of ${amount} was successful`
+        }
+    }
+
 }
