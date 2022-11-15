@@ -4,9 +4,9 @@ import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
 import { MailService } from '../mail/mail.service';
-import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
-import { UserDocument } from './user.interface';
 import { WalletService } from '../wallet/wallet.service';
+import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
+import { LeanUser, UserDocument } from './user.interface';
 const fromUser = process.env.FROM;
 const jwtsecret = process.env.JWT_SECRETS;
 
@@ -41,9 +41,9 @@ export class UserService {
       ...createUserDto,
     });
 
-    const createWallet = await this.walletService.createWallet(createdUser)
+    const createWallet = await this.walletService.createWallet(createdUser);
 
-    if(!createWallet){
+    if (!createWallet) {
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
     }
 
@@ -55,7 +55,7 @@ export class UserService {
       createdUserObject.email,
       createdUserObject.name,
     );
-  
+
     return {
       message: `${
         createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
@@ -64,8 +64,8 @@ export class UserService {
     };
   }
 
-  async getUserById(id: string) {
-    const user = await this.userModel.findById(id);
+  async getUserById(id: string): Promise<LeanUser> {
+    const user = await this.userModel.findById(id).lean();
 
     if (!user) {
       throw new BadRequestException(ErrorMessages.userNotFound(id));

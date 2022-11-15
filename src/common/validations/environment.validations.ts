@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { Environment } from '../enums';
 dotenv.config();
 
-class EnvironmentVariables {
+export class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
@@ -46,6 +46,12 @@ class EnvironmentVariables {
 
   @IsString()
   FROM: string;
+
+  @IsString()
+  PAYSTACK_PUBLIC_KEY: string;
+
+  @IsString()
+  PAYSTACK_SECRET_KEY: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

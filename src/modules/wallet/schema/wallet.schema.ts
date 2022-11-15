@@ -7,12 +7,9 @@ export const WalletSchema = new Schema({
   },
   balance: {
     type: Number,
-    default: 0.0
+    default: 0.0,
   },
-  totalMoneyRecieved: {
-    type: Number
+  totalMoneyReceived: {
+    type: Number,
   },
-  userType: {
-    type: String
-  }
 });
