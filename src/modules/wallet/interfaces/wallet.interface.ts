@@ -1,8 +1,10 @@
-import { Document } from 'mongoose';
+import { Document, LeanDocument } from 'mongoose';
+import { LeanUser } from '../../user/user.interface';
 
 export interface WalletDocument extends Document {
-  userId: string;
+  userId: string | LeanUser;
   balance: number;
-  userType: string;
-  totalMoneyRecieved?: number;
+  totalMoneyReceived?: number;
 }
+
+export type LeanWallet = LeanDocument<WalletDocument>;

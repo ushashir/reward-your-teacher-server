@@ -13,6 +13,8 @@ import { UserModule } from './modules/user/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
 import { WalletModule } from './modules/wallet/wallet.module';
+import { PaymentModule } from './modules/payment/payment.module';
+
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { WalletModule } from './modules/wallet/wallet.module';
     AuthModule,
     UserModule,
     WalletModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [

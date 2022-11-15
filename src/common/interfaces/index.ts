@@ -1,1 +1,1 @@
-export type { DocumentMeta } from './document.interface';
+export * from './environment.interface';
