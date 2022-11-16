@@ -7,7 +7,8 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserRolesEnum } from '../../../common/enums';
+import { SchoolEnum } from 'src/common/enums/school.enum';
+import { GenderEnum, UserRolesEnum } from '../../../common/enums';
 
 class BaseUserDto {
   @IsNotEmpty()
@@ -25,6 +26,9 @@ class BaseUserDto {
 export class CreateUserDto extends BaseUserDto {
   @MinLength(6)
   password?: string;
+
+  @IsOptional()
+  school?: string;
 }
 
 export class UpdateUserDto extends BaseUserDto {
@@ -36,4 +40,22 @@ export class UpdateUserDto extends BaseUserDto {
 
   @IsOptional()
   userType: UserRolesEnum;
+
+  @IsOptional()
+  gender: GenderEnum;
+
+  @IsOptional()
+  phoneNumber: number;
+
+  @IsOptional()
+  school: string;
+
+  @IsOptional()
+  years: string;
+
+  @IsOptional()
+  subject: string;
+
+  @IsOptional()
+  schoolType: SchoolEnum;
 }

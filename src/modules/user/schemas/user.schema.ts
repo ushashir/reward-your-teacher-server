@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { CallbackWithoutResultAndOptionalError, Schema } from 'mongoose';
-import { UserRolesEnum } from '../../../common/enums';
+import { UserRolesEnum, GenderEnum } from '../../../common/enums';
 
 export const UserSchema = new Schema(
   {
@@ -27,6 +27,23 @@ export const UserSchema = new Schema(
       // required: true, // because during google signup we won't know yet who you are
       enum: [UserRolesEnum.TEACHER, UserRolesEnum.STUDENT],
       uppercase: true,
+    },
+    gender: {
+      type: String,
+      enum: [GenderEnum.FEMALE, GenderEnum.MALE],
+      uppercase: true,
+    },
+    phoneNumber: {
+      type: Number,
+    },
+    school: {
+      type: String,
+    },
+    years: {
+      type: String,
+    },
+    subject: {
+      type: String,
     },
   },
   {
