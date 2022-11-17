@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Patch,
   UploadedFiles,
   UseGuards,
@@ -29,5 +30,11 @@ export class UserController {
     files: UserFiles,
   ) {
     return this.userService.updateMyProfile(user, updateUserDto, files);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/all-teachers')
+  getAllTeachers() {
+    return this.userService.getAllTeachers();
   }
 }

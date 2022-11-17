@@ -114,4 +114,16 @@ export class UserService {
       },
     );
   }
+
+  async getAllTeachers() {
+    const users = await this.userModel.find({
+      userType: UserRolesEnum.TEACHER,
+    });
+
+    if (!users) {
+      throw new BadRequestException(ErrorMessages.RECORD_NOT_FOUND);
+    }
+
+    return users;
+  }
 }
