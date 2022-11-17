@@ -17,4 +17,7 @@ export interface IEnvironment {
   FROM: string;
   PAYSTACK_PUBLIC_KEY: string;
   PAYSTACK_SECRET_KEY: string;
+  CLOUDINARY_CLOUD_NAME: string;
+  CLOUDINARY_API_KEY: string;
+  CLOUDINARY_API_SECRET: string;
 }

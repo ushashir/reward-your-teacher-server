@@ -1,22 +1,26 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MailService } from '../mail/mail.service';
 import { WalletService } from '../wallet/wallet.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
-import { LeanUser, UserDocument } from './user.interface';
+import { LeanUser, UserDocument, UserFiles } from './user.interface';
 const fromUser = process.env.FROM;
 const jwtsecret = process.env.JWT_SECRETS;
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
     readonly walletService: WalletService,
     private readonly mailService: MailService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async getUserByEmail(email: string) {
@@ -74,7 +78,11 @@ export class UserService {
     return user;
   }
 
-  async updateMyProfile(user: UserDocument, updateUserDto: UpdateUserDto) {
+  async updateMyProfile(
+    user: UserDocument,
+    updateUserDto: UpdateUserDto,
+    files: UserFiles,
+  ) {
     if (updateUserDto?.email && updateUserDto.email !== user.email) {
       const userExist = await this.getUserByEmail(updateUserDto.email);
 
@@ -83,8 +91,27 @@ export class UserService {
       }
     }
 
-    return this.userModel.findByIdAndUpdate(user._id, updateUserDto, {
-      new: true,
-    });
+    let profilePictureLink = '';
+
+    if (files?.profilePicture) {
+      const { profilePicture } = files;
+
+      const { secure_url } = await this.cloudinaryService.uploadImage(
+        profilePicture[0],
+      );
+
+      profilePictureLink = secure_url;
+    }
+
+    return this.userModel.findByIdAndUpdate(
+      user._id,
+      {
+        ...updateUserDto,
+        ...(!!profilePictureLink && { profilePicture: profilePictureLink }),
+      },
+      {
+        new: true,
+      },
+    );
   }
 }

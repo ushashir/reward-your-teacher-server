@@ -8,10 +8,6 @@ import { UserService } from '../../user/user.service';
 import { AuthPayload } from '../interfaces/auth.interface';
 import { AuthService } from '../services/auth.service';
 
-// const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL;
-// const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-// const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -65,5 +61,3 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     return authPayload;
   }
 }
-
-

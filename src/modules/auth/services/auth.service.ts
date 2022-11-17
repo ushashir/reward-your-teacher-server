@@ -23,7 +23,6 @@ export class AuthService {
     return this.userService.createUser(createUserDto);
   }
 
-
   async validateUser(email: string, password: string) {
     const user = await this.userService.getUserByEmail(email);
 
@@ -51,7 +50,7 @@ export class AuthService {
     // GENERATE AN ACCESS TOKEN
 
     const { accessToken, expiresIn } =
-      await this.tokenService.generateAccessToken(user._id, jwtid);
+      await this.tokenService.generateAccessToken(user._id.toString(), jwtid);
 
     return this.buildResponse(accessToken, refreshToken, expiresIn, user);
   }

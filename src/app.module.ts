@@ -12,9 +12,8 @@ import { UserModule } from './modules/user/user.module';
 // import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
-import { WalletModule } from './modules/wallet/wallet.module';
 import { PaymentModule } from './modules/payment/payment.module';
-
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [

@@ -52,6 +52,15 @@ export class EnvironmentVariables {
 
   @IsString()
   PAYSTACK_SECRET_KEY: string;
+
+  @IsString()
+  CLOUDINARY_CLOUD_NAME: string;
+
+  @IsString()
+  CLOUDINARY_API_KEY: string;
+
+  @IsString()
+  CLOUDINARY_API_SECRET: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {
