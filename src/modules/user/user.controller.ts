@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { GetUser } from '../../common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dtos/UserDto';
@@ -16,5 +16,11 @@ export class UserController {
     updateUserDto: UpdateUserDto,
   ) {
     return this.userService.updateMyProfile(user, updateUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/all-teachers')
+  getAllTeachers() {
+    return this.userService.getAllTeachers();
   }
 }

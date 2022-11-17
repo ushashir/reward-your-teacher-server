@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './modules/auth/services/auth.service';
 import { WalletModule } from './modules/wallet/wallet.module';
 import { PaymentModule } from './modules/payment/payment.module';
-
+// import { RewardModule } from './modules/reward/reward.module';
 
 @Module({
   imports: [
@@ -29,6 +29,7 @@ import { PaymentModule } from './modules/payment/payment.module';
     UserModule,
     WalletModule,
     PaymentModule,
+    // RewardModule,
   ],
   controllers: [AppController],
   providers: [
