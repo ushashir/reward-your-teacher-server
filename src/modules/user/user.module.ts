@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DbSchemas } from '../../common/constants';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MailModule } from '../mail/mail.module';
 import { WalletModule } from '../wallet/wallet.module';
 import { UserSchema } from './schemas/user.schema';
@@ -12,6 +13,7 @@ import { UserService } from './user.service';
     WalletModule,
     MongooseModule.forFeature([{ name: DbSchemas.user, schema: UserSchema }]),
     MailModule,
+    CloudinaryModule,
   ],
   controllers: [UserController],
   providers: [UserService],

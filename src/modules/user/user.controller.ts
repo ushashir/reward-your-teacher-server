@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { GetUser } from '../../common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dtos/UserDto';
+import { UserFiles } from './user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -10,12 +20,16 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update-me')
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'profilePicture', maxCount: 1 }]),
+  )
   updateProfile(
     @GetUser() user,
-    @Body()
-    updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFiles()
+    files: UserFiles,
   ) {
-    return this.userService.updateMyProfile(user, updateUserDto);
+    return this.userService.updateMyProfile(user, updateUserDto, files);
   }
 
   @UseGuards(JwtAuthGuard)

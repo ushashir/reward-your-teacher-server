@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return null;
     }
 
-    const user = await this.userService.getUserById(sub);
+    const user = await this.userService.getUserById(sub.toString());
 
     return user;
   }
