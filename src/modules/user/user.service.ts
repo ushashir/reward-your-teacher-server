@@ -9,9 +9,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
+import { dateRangeFilter, paginateAndSort } from '../../common/helpers';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MailService } from '../mail/mail.service';
 import { WalletService } from '../wallet/wallet.service';
+import { GetUsersDto } from './dtos/GetUsersDto';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { LeanUser, UserDocument, UserFiles } from './user.interface';
 const fromUser = process.env.FROM;
@@ -132,5 +134,33 @@ export class UserService {
     }
 
     return users;
+  }
+
+  async paginate(getUsersDto: GetUsersDto) {
+    const {
+      sort,
+      limit = 10,
+      page = 1,
+      name,
+      email,
+      userType,
+      minCreatedAt,
+      maxCreatedAt,
+    } = getUsersDto;
+
+    const filters = {
+      ...(name && { name: new RegExp(name, 'i') }),
+      ...(email && { email: new RegExp(email, 'i') }),
+      ...(userType && { userType }),
+      ...dateRangeFilter(minCreatedAt, maxCreatedAt, 'createdAt'),
+    };
+
+    return paginateAndSort({
+      model: this.userModel,
+      filters,
+      sort,
+      page,
+      limit,
+    });
   }
 }
