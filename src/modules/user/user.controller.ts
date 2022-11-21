@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Patch,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -10,6 +11,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { GetUser } from '../../common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUsersDto } from './dtos/GetUsersDto';
 import { UpdateUserDto } from './dtos/UserDto';
 import { UserFiles } from './user.interface';
 import { UserService } from './user.service';
@@ -36,5 +38,11 @@ export class UserController {
   @Get('/all-teachers')
   getAllTeachers() {
     return this.userService.getAllTeachers();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/all')
+  getAllUsers(@Query() getUsersDto: GetUsersDto) {
+    return this.userService.paginate(getUsersDto);
   }
 }
