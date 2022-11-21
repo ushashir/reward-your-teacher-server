@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
@@ -18,7 +24,8 @@ export class UserService {
   constructor(
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
-    readonly walletService: WalletService,
+    @Inject(forwardRef(() => WalletService))
+    private readonly walletService: WalletService,
     private readonly mailService: MailService,
     private readonly cloudinaryService: CloudinaryService,
   ) {}

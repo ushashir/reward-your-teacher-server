@@ -13,6 +13,7 @@ import { AuthService } from './modules/auth/services/auth.service';
 import { PaymentModule } from './modules/payment/payment.module';
 import { UserModule } from './modules/user/user.module';
 import { WalletModule } from './modules/wallet/wallet.module';
+import { TransferModule } from './modules/transfer/transfer.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { WalletModule } from './modules/wallet/wallet.module';
     UserModule,
     WalletModule,
     PaymentModule,
+    TransferModule,
   ],
   controllers: [AppController],
   providers: [

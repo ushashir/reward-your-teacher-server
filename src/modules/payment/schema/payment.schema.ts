@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { DbSchemas } from '../../../common/constants';
 import { PaymentStatusEnum } from '../../../common/enums';
 
 export const PaymentSchema = new Schema(
@@ -6,6 +7,7 @@ export const PaymentSchema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: DbSchemas.user,
     },
     amount: {
       type: Number,

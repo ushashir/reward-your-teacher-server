@@ -1,9 +1,11 @@
 import { Schema } from 'mongoose';
+import { DbSchemas } from '../../../common/constants';
 
 export const WalletSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
+    ref: DbSchemas.user,
   },
   balance: {
     type: Number,
