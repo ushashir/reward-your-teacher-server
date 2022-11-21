@@ -161,6 +161,9 @@ export class UserService {
       sort,
       page,
       limit,
+      options: {
+        lean: true,
+      },
     });
   }
 }
