@@ -1,16 +1,21 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, PopulateOptions } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
+import { TransferService } from '../transfer/transfer.service';
 import { LeanUser, UserDocument } from '../user/user.interface';
+import { UserService } from '../user/user.service';
 import { LeanWallet, WalletDocument } from './interfaces/wallet.interface';
 
 @Injectable()
 export class WalletService {
+  private readonly logger = new Logger(WalletService.name);
   constructor(
     @InjectModel(DbSchemas.wallet)
     private readonly walletModel: Model<WalletDocument>,
+    private readonly transferService: TransferService,
+    private readonly userService: UserService,
   ) {}
 
   async createWallet(user: LeanUser, balance?: number): Promise<LeanWallet> {
@@ -23,13 +28,12 @@ export class WalletService {
     return wallet.toObject();
   }
 
-  async getWalletBalance(id: string) {
+  async getWallet(id: string) {
     const wallet = await this.walletModel.findOne({ userId: id });
-    const { balance } = wallet;
 
     return {
       message: 'Balance fetched successfully',
-      walletBalance: balance,
+      wallet: wallet.toObject(),
     };
   }
 
@@ -37,10 +41,6 @@ export class WalletService {
     //TODO: please use a dto for this controller and do your validations there
     const wallet = await this.walletModel.findOne({ userId: id });
     const { balance } = wallet;
-
-    if (amount <= 0) {
-      throw new BadRequestException(ErrorMessages.INVALID_WITHDRAWAL_AMOUNT);
-    }
 
     if (amount > balance) {
       throw new BadRequestException(ErrorMessages.INSUFFICIENT_FUND);
@@ -57,58 +57,45 @@ export class WalletService {
     };
   }
 
-  async sendMoney(
-    user: UserDocument,
-    amount: number,
-    destination: string,
-    id: string,
-  ) {
+  async sendMoney(user: UserDocument, amount: number, destination: string) {
     if (user.userType !== UserRolesEnum.STUDENT) {
       throw new BadRequestException(ErrorMessages.TEACHER_CANNOT_TRANSFER);
     }
 
-    const sender = await this.walletModel.findOne({ userId: id });
+    const senderWallet = await this.getWalletByUserId(user._id.toString());
 
-    const receiver = await this.walletModel.findOne(
-      { userId: destination },
-      {
-        populate: {
-          path: 'userId',
-        },
-      },
-    );
+    const receiverWallet = await this.getWalletByUserId(destination, {
+      path: 'userId',
+    });
 
-    if (!sender || !receiver || destination === id) {
+    if (
+      !senderWallet ||
+      !receiverWallet ||
+      destination === user._id.toString()
+    ) {
       throw new BadRequestException(ErrorMessages.INVALID_REQUEST);
     }
 
-    if ((receiver.userId as LeanUser).userType !== UserRolesEnum.TEACHER) {
+    if (
+      (receiverWallet.userId as LeanUser).userType !== UserRolesEnum.TEACHER
+    ) {
       throw new BadRequestException(ErrorMessages.CANNOT_TRANSFER_TO_STUDENT);
     }
 
-    const { balance } = sender;
-    const receiverBalance = receiver.balance;
+    const { balance } = senderWallet;
 
-    if (amount <= 0) {
-      throw new BadRequestException(ErrorMessages.INVALID_WITHDRAWAL_AMOUNT);
-    }
     if (amount > balance) {
       throw new BadRequestException(ErrorMessages.INSUFFICIENT_FUND);
     }
 
-    const senderNewBalance = balance - amount;
-    const receiverNewBalance = receiverBalance + amount;
+    senderWallet.balance -= amount;
+    receiverWallet.balance += amount;
+    receiverWallet.totalMoneyReceived += amount;
 
-    await this.walletModel.findByIdAndUpdate(sender._id, {
-      balance: senderNewBalance,
-    });
+    await senderWallet.save();
+    await receiverWallet.save();
 
-    const receiversTotalMoneyRecieved = receiver.totalMoneyReceived + amount;
-
-    await this.walletModel.findByIdAndUpdate(receiver._id, {
-      balance: receiverNewBalance,
-      totalMoneyReceived: receiversTotalMoneyRecieved,
-    });
+    this.transferService.createTransfer(user._id, destination, amount);
 
     return {
       message: `Transfer of ${amount} was successful`,
@@ -145,5 +132,29 @@ export class WalletService {
     await existingWallet.save();
 
     return existingWallet.toObject();
+  }
+
+  // this tries to get a wallet by user id, and if it does not exist creates the wallet
+  private async getWalletByUserId(
+    userId: string,
+    populate?: PopulateOptions | (PopulateOptions | string)[],
+  ) {
+    const query = this.walletModel.findOne({ userId });
+
+    if (populate) {
+      query.populate(populate);
+    }
+
+    const wallet = await query.exec();
+
+    if (!wallet) {
+      const user = await this.userService.getUserById(userId);
+
+      await this.createWallet(user);
+
+      return this.getWalletByUserId(userId, populate);
+    }
+
+    return wallet;
   }
 }
