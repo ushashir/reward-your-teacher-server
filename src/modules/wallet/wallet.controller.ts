@@ -11,27 +11,20 @@ export class WalletController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/')
-  getWalletBalance(@GetUser() user) {
-    return this.walletService.getWallet(user.id);
+  getWallet(@GetUser() user) {
+    console.log('user => ', user);
+    return this.walletService.getWallet(user._id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/withdraw')
   withdraw(@Body() { amount }: WithdrawDto, @GetUser() user) {
-    // TODO: please use a dto for this controller and do your validations there
-
-    return this.walletService.withdraw(amount, user.id);
+    return this.walletService.withdraw(amount, user._id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/send')
   sendMoney(@Body() { amount, destination }: SendMoneyDto, @GetUser() user) {
     return this.walletService.sendMoney(user, amount, destination);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('/total-money')
-  totalMoneyReceived(@GetUser() user) {
-    return this.walletService.getTotalMoneyReceived(user);
   }
 }

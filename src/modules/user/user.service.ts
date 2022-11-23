@@ -54,7 +54,9 @@ export class UserService {
       ...createUserDto,
     });
 
-    const createWallet = await this.walletService.createWallet(createdUser);
+    const createWallet = await this.walletService.createWallet(
+      createdUser._id.toString(),
+    );
 
     if (!createWallet) {
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
