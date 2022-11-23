@@ -28,8 +28,6 @@ export class WalletService {
   }
 
   async getWallet(id: string) {
-    console.log('id => ', id);
-
     const wallet = await this.walletModel.findOne({ userId: id });
 
     return {

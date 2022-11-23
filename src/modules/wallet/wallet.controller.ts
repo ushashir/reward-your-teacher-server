@@ -12,7 +12,6 @@ export class WalletController {
   @UseGuards(JwtAuthGuard)
   @Get('/')
   getWallet(@GetUser() user) {
-    console.log('user => ', user);
     return this.walletService.getWallet(user._id);
   }
 
