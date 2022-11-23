@@ -18,17 +18,18 @@ export class WalletService {
     private readonly userService: UserService,
   ) {}
 
-  async createWallet(user: LeanUser, balance?: number): Promise<LeanWallet> {
+  async createWallet(userId: string, balance?: number): Promise<LeanWallet> {
     const wallet = await this.walletModel.create({
-      userId: user._id,
-      totalMoneyReceived: 0.0,
-      balance: balance || 0.0,
+      userId,
+      balance: balance || 0,
     });
 
     return wallet.toObject();
   }
 
   async getWallet(id: string) {
+    console.log('id => ', id);
+
     const wallet = await this.walletModel.findOne({ userId: id });
 
     return {
@@ -89,6 +90,8 @@ export class WalletService {
     }
 
     senderWallet.balance -= amount;
+    senderWallet.totalMoneySent += amount;
+
     receiverWallet.balance += amount;
     receiverWallet.totalMoneyReceived += amount;
 
@@ -102,27 +105,11 @@ export class WalletService {
     };
   }
 
-  async getTotalMoneyReceived(user: UserDocument) {
-    if (user.userType !== UserRolesEnum.TEACHER) {
-      throw new BadRequestException(ErrorMessages.CANNOT_GET_FOR_STUDENT);
-    }
-
-    const record = await this.walletModel.findOne({ userId: user._id });
-
-    if (!record) {
-      throw new BadRequestException(ErrorMessages.RECORD_NOT_FOUND);
-    }
-
-    const { totalMoneyReceived } = record;
-
-    return { totalMoneyReceived };
-  }
-
-  async fundWallet(user: LeanUser, amount: number) {
-    const existingWallet = await this.walletModel.findOne({ userId: user._id });
+  async fundWallet(userId: string, amount: number) {
+    const existingWallet = await this.walletModel.findOne({ userId });
 
     if (!existingWallet) {
-      const createdWallet = await this.createWallet(user, amount);
+      const createdWallet = await this.createWallet(userId, amount);
 
       return createdWallet;
     }
@@ -148,9 +135,7 @@ export class WalletService {
     const wallet = await query.exec();
 
     if (!wallet) {
-      const user = await this.userService.getUserById(userId);
-
-      await this.createWallet(user);
+      await this.createWallet(userId);
 
       return this.getWalletByUserId(userId, populate);
     }

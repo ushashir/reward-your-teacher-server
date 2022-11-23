@@ -120,7 +120,7 @@ export class PaymentService {
 
         await existingPayment.save();
 
-        await this.walletService.fundWallet(user, paymentAmount);
+        await this.walletService.fundWallet(userId.toString(), paymentAmount);
         break;
 
       default:

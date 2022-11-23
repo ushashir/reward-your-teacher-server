@@ -4,7 +4,8 @@ import { LeanUser } from '../../user/user.interface';
 export interface WalletDocument extends Document {
   userId: string | LeanUser;
   balance: number;
-  totalMoneyReceived?: number;
+  totalMoneyReceived: number;
+  totalMoneySent: number;
 }
 
 export type LeanWallet = LeanDocument<WalletDocument>;
