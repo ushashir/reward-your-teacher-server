@@ -16,8 +16,6 @@ import { WalletService } from '../wallet/wallet.service';
 import { GetUsersDto } from './dtos/GetUsersDto';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
 import { LeanUser, UserDocument, UserFiles } from './user.interface';
-const fromUser = process.env.FROM;
-const jwtsecret = process.env.JWT_SECRETS;
 
 @Injectable()
 export class UserService {

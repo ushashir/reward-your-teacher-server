@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="payWithPaystack()">Pay NOw</button>
+
+    <script>
+      function payWithPaystack() {
+        let handler = PaystackPop.setup({
+          key: 'pk_test_43379ad7d24ddcb06b2a7fb95bb2effb8d70572b', // Replace with your public key
+          email: 'kelvinjune2@gmail.com',
+          amount: 20000 * 100,
+          ref: 'RTYN-PYK-18199113', // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+          // label: "Optional string that replaces customer email"
+          onClose: function () {
+            alert('Window closed.');
+          },
+          callback: function (response) {
+            let message = 'Payment complete! Reference: ' + response.reference;
+            alert(message);
+          },
+        });
+
+        handler.openIframe();
+      }
+    </script>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+  </body>
+</html>
