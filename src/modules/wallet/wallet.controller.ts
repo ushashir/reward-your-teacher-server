@@ -28,7 +28,7 @@ export class WalletController {
       user,
       req.body.amount,
       req.body.destination,
-      user.id,
+      user._id,
     );
   }
 

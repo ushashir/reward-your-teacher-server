@@ -63,28 +63,28 @@ export class WalletService {
     destination: string,
     id: string,
   ) {
-    if (user.userType !== UserRolesEnum.STUDENT) {
-      throw new BadRequestException(ErrorMessages.TEACHER_CANNOT_TRANSFER);
-    }
+    // if (user.userType !== UserRolesEnum.STUDENT) {
+    //   throw new BadRequestException(ErrorMessages.TEACHER_CANNOT_TRANSFER);
+    // }
 
     const sender = await this.walletModel.findOne({ userId: id });
 
     const receiver = await this.walletModel.findOne(
       { userId: destination },
-      {
-        populate: {
-          path: 'userId',
-        },
-      },
+      // {
+      //   populate: {
+      //     path: 'userId',
+      //   },
+      // },
     );
 
     if (!sender || !receiver || destination === id) {
       throw new BadRequestException(ErrorMessages.INVALID_REQUEST);
     }
 
-    if ((receiver.userId as LeanUser).userType !== UserRolesEnum.TEACHER) {
-      throw new BadRequestException(ErrorMessages.CANNOT_TRANSFER_TO_STUDENT);
-    }
+    // if ((receiver.userId as LeanUser).userType !== UserRolesEnum.TEACHER) {
+    //   throw new BadRequestException(ErrorMessages.CANNOT_TRANSFER_TO_STUDENT);
+    // }
 
     const { balance } = sender;
     const receiverBalance = receiver.balance;
@@ -104,6 +104,8 @@ export class WalletService {
     });
 
     const receiversTotalMoneyRecieved = receiver.totalMoneyReceived + amount;
+    console.log(receiversTotalMoneyRecieved);
+
 
     await this.walletModel.findByIdAndUpdate(receiver._id, {
       balance: receiverNewBalance,
