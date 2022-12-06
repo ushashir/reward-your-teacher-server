@@ -11,6 +11,8 @@ import { LeanUser } from '../user/user.interface';
 import { WalletService } from '../wallet/wallet.service';
 import { InitializePaymentDto } from './dtos/InitializePaymentDto';
 import { VerifyPaymentDto } from './dtos/VerifyPaymentDto';
+
+
 import {
   PaymentDocument,
   PaystackSuccess,
@@ -120,7 +122,7 @@ export class PaymentService {
 
         await existingPayment.save();
 
-        await this.walletService.fundWallet(user, paymentAmount);
+        await this.walletService.fundWallet(userId.toString(), paymentAmount);
         break;
 
       default:

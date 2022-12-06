@@ -1,7 +1,19 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Query,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { GetUser } from '../../common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUsersDto } from './dtos/GetUsersDto';
 import { UpdateUserDto } from './dtos/UserDto';
+import { UserFiles } from './user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -10,17 +22,27 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update-me')
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'profilePicture', maxCount: 1 }]),
+  )
   updateProfile(
     @GetUser() user,
-    @Body()
-    updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFiles()
+    files: UserFiles,
   ) {
-    return this.userService.updateMyProfile(user, updateUserDto);
+    return this.userService.updateMyProfile(user, updateUserDto, files);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/all-teachers')
   getAllTeachers() {
     return this.userService.getAllTeachers();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/all')
+  getAllUsers(@Query() getUsersDto: GetUsersDto) {
+    return this.userService.paginate(getUsersDto);
   }
 }

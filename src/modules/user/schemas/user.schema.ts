@@ -1,55 +1,61 @@
-import * as bcrypt from 'bcryptjs';
-import { CallbackWithoutResultAndOptionalError, Schema } from 'mongoose';
-import { UserRolesEnum, GenderEnum } from '../../../common/enums';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { CallbackWithoutResultAndOptionalError } from 'mongoose';
+import { GenderEnum, UserRolesEnum } from '../../../common/enums';
 
-export const UserSchema = new Schema(
-  {
-    name: {
-      type: String,
-      trim: true,
-      required: true,
-    },
-    email: {
-      type: String,
-      trim: true,
-      required: true,
-      unique: true,
-      email: true,
-      lowercase: true,
-    },
-    password: {
-      type: String,
-      // required: true,
-      select: false,
-    },
-    userType: {
-      type: String,
-      // required: true, // because during google signup we won't know yet who you are
-      enum: [UserRolesEnum.TEACHER, UserRolesEnum.STUDENT],
-      uppercase: true,
-    },
-    gender: {
-      type: String,
-      enum: [GenderEnum.FEMALE, GenderEnum.MALE],
-      uppercase: true,
-    },
-    phoneNumber: {
-      type: Number,
-    },
-    school: {
-      type: String,
-    },
-    years: {
-      type: String,
-    },
-    subject: {
-      type: String,
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+import * as bcrypt from 'bcryptjs';
+
+@Schema()
+export class User {
+  @Prop({
+    trim: true,
+    required: true,
+  })
+  name: string;
+
+  @Prop({
+    trim: true,
+    required: true,
+    unique: true,
+    email: true,
+    lowercase: true,
+  })
+  email: string;
+
+  @Prop({
+    select: false,
+  })
+  password?: string;
+
+  @Prop({
+    enum: [UserRolesEnum.TEACHER, UserRolesEnum.STUDENT],
+    uppercase: true,
+  })
+  userType?: UserRolesEnum;
+
+  @Prop({
+    type: String,
+    enum: [GenderEnum.FEMALE, GenderEnum.MALE],
+    uppercase: true,
+  })
+  gender?: GenderEnum;
+
+  @Prop()
+  phoneNumber?: string;
+
+  @Prop()
+  school?: string;
+
+  @Prop()
+  years?: string;
+
+  @Prop()
+  subject?: string;
+
+  @Prop()
+  profilePicture?: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre(
   'save',

@@ -1,12 +1,10 @@
-import { LeanDocument } from 'mongoose';
-import { UserRolesEnum } from '../../common/enums';
+import { HydratedDocument, LeanDocument } from 'mongoose';
+import { User } from './schemas/user.schema';
 
-export interface UserDocument extends Document {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  userType?: UserRolesEnum;
-}
+export type UserDocument = HydratedDocument<User>;
 
 export type LeanUser = LeanDocument<UserDocument>;
+
+export interface UserFiles {
+  profilePicture: Express.Multer.File[];
+}

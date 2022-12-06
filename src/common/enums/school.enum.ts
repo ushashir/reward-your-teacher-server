@@ -1,4 +1,4 @@
-export enum SchoolEnum {
+export enum SchoolTypeEnum {
   PRIVATE = 'PRIVATE',
   PUBLIC = 'PUBLIC',
 }

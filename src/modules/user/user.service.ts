@@ -1,22 +1,35 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
+import { dateRangeFilter, paginateAndSort } from '../../common/helpers';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MailService } from '../mail/mail.service';
 import { WalletService } from '../wallet/wallet.service';
+import { GetUsersDto } from './dtos/GetUsersDto';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
-import { LeanUser, UserDocument } from './user.interface';
+import { LeanUser, UserDocument, UserFiles } from './user.interface';
 const fromUser = process.env.FROM;
 const jwtsecret = process.env.JWT_SECRETS;
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectModel(DbSchemas.user)
     private readonly userModel: Model<UserDocument>,
-    readonly walletService: WalletService,
+    @Inject(forwardRef(() => WalletService))
+    private readonly walletService: WalletService,
     private readonly mailService: MailService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async getUserByEmail(email: string) {
@@ -41,7 +54,9 @@ export class UserService {
       ...createUserDto,
     });
 
-    const createWallet = await this.walletService.createWallet(createdUser);
+    const createWallet = await this.walletService.createWallet(
+      createdUser._id.toString(),
+    );
 
     if (!createWallet) {
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
@@ -74,7 +89,11 @@ export class UserService {
     return user;
   }
 
-  async updateMyProfile(user: UserDocument, updateUserDto: UpdateUserDto) {
+  async updateMyProfile(
+    user: UserDocument,
+    updateUserDto: UpdateUserDto,
+    files: UserFiles,
+  ) {
     if (updateUserDto?.email && updateUserDto.email !== user.email) {
       const userExist = await this.getUserByEmail(updateUserDto.email);
 
@@ -83,9 +102,28 @@ export class UserService {
       }
     }
 
-    return this.userModel.findByIdAndUpdate(user._id, updateUserDto, {
-      new: true,
-    });
+    let profilePictureLink = '';
+
+    if (files?.profilePicture) {
+      const { profilePicture } = files;
+
+      const { secure_url } = await this.cloudinaryService.uploadImage(
+        profilePicture[0],
+      );
+
+      profilePictureLink = secure_url;
+    }
+
+    return this.userModel.findByIdAndUpdate(
+      user._id,
+      {
+        ...updateUserDto,
+        ...(!!profilePictureLink && { profilePicture: profilePictureLink }),
+      },
+      {
+        new: true,
+      },
+    );
   }
 
   async getAllTeachers() {
@@ -98,5 +136,36 @@ export class UserService {
     }
 
     return users;
+  }
+
+  async paginate(getUsersDto: GetUsersDto) {
+    const {
+      sort,
+      limit = 10,
+      page = 1,
+      name,
+      email,
+      userType,
+      minCreatedAt,
+      maxCreatedAt,
+    } = getUsersDto;
+
+    const filters = {
+      ...(name && { name: new RegExp(name, 'i') }),
+      ...(email && { email: new RegExp(email, 'i') }),
+      ...(userType && { userType }),
+      ...dateRangeFilter(minCreatedAt, maxCreatedAt, 'createdAt'),
+    };
+
+    return paginateAndSort({
+      model: this.userModel,
+      filters,
+      sort,
+      page,
+      limit,
+      options: {
+        lean: true,
+      },
+    });
   }
 }

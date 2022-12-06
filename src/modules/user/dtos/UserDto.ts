@@ -7,8 +7,12 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { SchoolEnum } from 'src/common/enums/school.enum';
-import { GenderEnum, UserRolesEnum } from '../../../common/enums';
+
+import {
+  GenderEnum,
+  SchoolTypeEnum,
+  UserRolesEnum,
+} from '../../../common/enums';
 
 class BaseUserDto {
   @IsNotEmpty()
@@ -21,14 +25,15 @@ class BaseUserDto {
   @Transform(({ value }) => value.toUpperCase())
   @IsEnum(UserRolesEnum)
   userType?: UserRolesEnum;
+
+  @IsOptional()
+  @IsString()
+  school?: string;
 }
 
 export class CreateUserDto extends BaseUserDto {
   @MinLength(6)
   password?: string;
-
-  @IsOptional()
-  school?: string;
 }
 
 export class UpdateUserDto extends BaseUserDto {
@@ -39,23 +44,24 @@ export class UpdateUserDto extends BaseUserDto {
   email: string;
 
   @IsOptional()
-  userType: UserRolesEnum;
+  userType?: UserRolesEnum;
 
   @IsOptional()
-  gender: GenderEnum;
+  @Transform(({ value }) => value.toUpperCase())
+  @IsEnum(GenderEnum)
+  gender?: GenderEnum;
 
   @IsOptional()
-  phoneNumber: number;
+  phoneNumber?: number;
 
   @IsOptional()
-  school: string;
+  years?: string;
 
   @IsOptional()
-  years: string;
+  subject?: string;
 
   @IsOptional()
-  subject: string;
-
-  @IsOptional()
-  schoolType: SchoolEnum;
+  @Transform(({ value }) => value.toUpperCase())
+  @IsEnum(SchoolTypeEnum)
+  schoolType?: SchoolTypeEnum;
 }
