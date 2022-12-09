@@ -27,3 +27,4 @@ export class WalletController {
     return this.walletService.sendMoney(user, amount, destination);
   }
 }
+

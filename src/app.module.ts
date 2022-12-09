@@ -14,6 +14,7 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { UserModule } from './modules/user/user.module';
 import { WalletModule } from './modules/wallet/wallet.module';
 import { TransferModule } from './modules/transfer/transfer.module';
+import { AppreciationModule } from './modules/appreciation/appreciation.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TransferModule } from './modules/transfer/transfer.module';
     WalletModule,
     PaymentModule,
     TransferModule,
+    AppreciationModule,
   ],
   controllers: [AppController],
   providers: [

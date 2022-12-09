@@ -67,6 +67,7 @@ export class WalletService {
       path: 'userId',
     });
 
+
     if (
       !senderWallet ||
       !receiverWallet ||
@@ -96,7 +97,7 @@ export class WalletService {
     await senderWallet.save();
     await receiverWallet.save();
 
-    this.transferService.createTransfer(user._id, destination, amount);
+    this.transferService.createTransfer(user._id, destination, amount, false);
 
     return {
       message: `Transfer of ${amount} was successful`,

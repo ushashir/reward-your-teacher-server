@@ -9,18 +9,20 @@ import { Transfer } from './schemas/transfer.schema';
 export class TransferService {
   constructor(
     @InjectModel(Transfer.name)
-    private readonly transferModel: Model<TransferDocument>,
+    public readonly transferModel: Model<TransferDocument>,
   ) {}
 
   public createTransfer(
     senderId: UserDocument['_id'],
     receiverId: UserDocument['_id'] | string,
     amount: number,
+    appreciation: boolean,
   ) {
     const transfer = new this.transferModel({
       senderId,
       receiverId,
       amount,
+      appreciation,
     });
 
     return transfer.save().then((transfer) => transfer.toObject());

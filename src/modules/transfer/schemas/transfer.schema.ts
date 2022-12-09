@@ -25,6 +25,11 @@ export class Transfer {
     type: Number,
   })
   amount: number;
+
+  @Prop({
+    type: Boolean,
+  })
+  appreciation: boolean;
 }
 
 export const TransferSchema = SchemaFactory.createForClass(Transfer);
