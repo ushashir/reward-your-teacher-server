@@ -16,7 +16,7 @@ export class WalletService {
     private readonly walletModel: Model<WalletDocument>,
     private readonly transferService: TransferService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   async createWallet(userId: string, balance?: number): Promise<LeanWallet> {
     const wallet = await this.walletModel.create({
@@ -36,25 +36,19 @@ export class WalletService {
     };
   }
 
-  async withdraw(amount: number, id: string) {
-    //TODO: please use a dto for this controller and do your validations there
+  async updateWalletBalance(newBalance: number, id: string) {
     const wallet = await this.walletModel.findOne({ userId: id });
-    const { balance } = wallet;
-
-    if (amount > balance) {
-      throw new BadRequestException(ErrorMessages.INSUFFICIENT_FUND);
-    }
-
-    const newBalance = balance - amount;
-
-    wallet.balance = newBalance;
-
-    await wallet.save();
-
-    return {
-      message: `Withdrawal of ${amount} successful`,
+    if (!wallet) {
+      throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
     };
+
+    const updateBalance = await this.walletModel.findOneAndUpdate({ userId: id }, { balance: newBalance }, {
+      new: true
+    });
+
+    return updateBalance
   }
+
 
   async sendMoney(user: UserDocument, amount: number, destination: string) {
     if (user.userType !== UserRolesEnum.STUDENT) {

@@ -16,6 +16,8 @@ export class ErrorMessages {
   static INVALID_SORT_ORDER = "Sort order can only be 'asc' or 'desc'";
   static STUDENT_CANNOT_SEND_APPRECIATION = 'Student cannot send appreciation';
   static APPRECIATION_CAN_ONLY_BE_SENT_ONCE = 'Appreciation can only be sent once'
+  static WITHDRAWAL_FAILED = "Withdrawal failed";
+
   static invalidSortField(fields: string[]) {
     return `Sort field should be one of ${fields.join(',')}`;
   }

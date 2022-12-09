@@ -3,7 +3,5 @@ export class DbSchemas {
   static readonly user = 'user';
   static readonly wallet = 'wallet';
   static readonly payment = 'payment';
-  static readonly reward = 'reward';
-  static readonly school = 'school';
-  static readonly teacher = 'teacher';
+  static readonly withdrawal = 'withdrawal';
 }

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Patch,
   Query,
   UploadedFiles,
@@ -18,7 +19,9 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update-me')
@@ -44,5 +47,11 @@ export class UserController {
   @Get('/all')
   getAllUsers(@Query() getUsersDto: GetUsersDto) {
     return this.userService.paginate(getUsersDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/student/:id')
+  getTotal(@Param("id") id: string) {
+    return this.userService.getStudent(id.toString())
   }
 }

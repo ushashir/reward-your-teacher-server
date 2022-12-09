@@ -15,6 +15,7 @@ import { UserModule } from './modules/user/user.module';
 import { WalletModule } from './modules/wallet/wallet.module';
 import { TransferModule } from './modules/transfer/transfer.module';
 import { AppreciationModule } from './modules/appreciation/appreciation.module';
+import { WithdrawalModule } from './modules/withdrawal/withdrawal.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AppreciationModule } from './modules/appreciation/appreciation.module';
     PaymentModule,
     TransferModule,
     AppreciationModule,
+    WithdrawalModule
   ],
   controllers: [AppController],
   providers: [
