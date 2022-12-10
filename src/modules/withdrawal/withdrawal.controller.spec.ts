@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RewardController } from './reward.controller';
+import { RewardController } from './withdrawal.controller';
 
 describe('RewardController', () => {
   let controller: RewardController;

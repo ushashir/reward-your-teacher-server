@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DbSchemas } from '../../common/constants';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MailModule } from '../mail/mail.module';
+import { TransferModule } from '../transfer/transfer.module';
 import { WalletModule } from '../wallet/wallet.module';
 import { UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
@@ -14,10 +15,11 @@ import { UserService } from './user.service';
     MailModule,
     CloudinaryModule,
     // WalletModule,
+    TransferModule,
     forwardRef(() => WalletModule),
   ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

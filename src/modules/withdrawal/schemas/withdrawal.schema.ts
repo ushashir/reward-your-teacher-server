@@ -1,23 +1,21 @@
 import { Schema } from 'mongoose';
 
-export const RewardSchema = new Schema(
+export const WithdrawalSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      required: true,
-    },
-    receiverId: {
-      type: String,
       required: true,
     },
     amount: {
       type: Number,
       required: true,
     },
-    email: {
+    status: {
       type: String,
-      required: true,
-    },
+      enum: ["pending", "failed", "completed"],
+      default: "pending",
+      required: true
+    }
   },
   {
     timestamps: true,

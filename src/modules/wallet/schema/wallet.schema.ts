@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { TransactionTypeEnum } from 'src/common/enums/transaction.enum';
 import { DbSchemas } from '../../../common/constants';
 
 export const WalletSchema = new Schema({

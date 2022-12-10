@@ -6,12 +6,15 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { UserRolesEnum } from '../../common/enums';
 import { dateRangeFilter, paginateAndSort } from '../../common/helpers';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MailService } from '../mail/mail.service';
+import { TransferDocument } from '../transfer/interfaces/transfer.interface';
+import { Transfer } from '../transfer/schemas/transfer.schema';
+import { TransferService } from '../transfer/transfer.service';
 import { WalletService } from '../wallet/wallet.service';
 import { GetUsersDto } from './dtos/GetUsersDto';
 import { CreateUserDto, UpdateUserDto } from './dtos/UserDto';
@@ -30,7 +33,8 @@ export class UserService {
     private readonly walletService: WalletService,
     private readonly mailService: MailService,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+    private readonly transferService: TransferService,
+  ) { }
 
   async getUserByEmail(email: string) {
     return this.userModel
@@ -72,9 +76,8 @@ export class UserService {
     );
 
     return {
-      message: `${
-        createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
-      } successfully created`,
+      message: `${createUserDto.userType === UserRolesEnum.STUDENT ? 'Student' : 'Teacher'
+        } successfully created`,
       user: createdUserObject,
     };
   }
@@ -167,5 +170,16 @@ export class UserService {
         lean: true,
       },
     });
+  };
+
+  async getStudent(id: string): Promise<LeanUser> {
+    const user = await this.userModel.findById(id).lean();
+
+    if (!user) {
+      throw new BadRequestException(ErrorMessages.userNotFound(id));
+    }
+
+    return user;
   }
+
 }

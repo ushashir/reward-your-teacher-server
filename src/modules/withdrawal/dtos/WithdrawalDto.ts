@@ -1,15 +1,15 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateRewardDto {
+export class CreateWithdrawalDto {
   @IsNotEmpty()
   userId: string;
 
-  @IsNotEmpty()
-  receiverId: string;
+  // @IsNotEmpty()
+  // receiverId: string;
 
   @IsNotEmpty()
   amount: number;
 
-  @IsNotEmpty()
-  email: string;
+  // @IsNotEmpty()
+  // email: string;
 }
