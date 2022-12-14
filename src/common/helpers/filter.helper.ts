@@ -2,6 +2,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 import {
   FilterQuery,
   Model,
+  PopulateOptions,
   ProjectionType,
   QueryOptions,
   SortOrder,
@@ -42,6 +43,7 @@ type PaginateAndSort<T> = {
   limit?: number;
   projection?: ProjectionType<T> | null | undefined;
   options?: QueryOptions<T> | null | undefined;
+  populate?: PopulateOptions | (PopulateOptions | string)[];
 };
 
 export const paginateAndSort = async <T>(params: PaginateAndSort<T>) => {
@@ -53,9 +55,14 @@ export const paginateAndSort = async <T>(params: PaginateAndSort<T>) => {
     limit = 10,
     projection = null,
     options = null,
+    populate = null,
   } = params;
 
   const query = params.model.find(filters, projection, options);
+
+  if (populate) {
+    query.populate(populate);
+  }
 
   if (sort) {
     const [key, order] = sort.split(':');

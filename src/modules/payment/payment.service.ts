@@ -6,9 +6,11 @@ import { Model } from 'mongoose';
 import { catchError, lastValueFrom, map, tap, throwError } from 'rxjs';
 import { DbSchemas, ErrorMessages } from '../../common/constants';
 import { PaymentStatusEnum } from '../../common/enums';
+import { paginateAndSort } from '../../common/helpers';
 import { IEnvironment } from '../../common/interfaces';
 import { LeanUser } from '../user/user.interface';
 import { WalletService } from '../wallet/wallet.service';
+import { GetPaymentsDto } from './dtos/GetPaymentsDto';
 import { InitializePaymentDto } from './dtos/InitializePaymentDto';
 import { VerifyPaymentDto } from './dtos/VerifyPaymentDto';
 
@@ -157,5 +159,21 @@ export class PaymentService {
     }
 
     this.generateReference();
+  }
+
+  async getPayments(user: LeanUser, query: GetPaymentsDto) {
+    const { sort, page, limit } = query;
+
+    const filters = {
+      status: PaymentStatusEnum.SUCCESS,
+    };
+
+    return paginateAndSort({
+      model: this.paymentModel,
+      filters,
+      sort,
+      page,
+      limit,
+    });
   }
 }

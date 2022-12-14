@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ErrorMessages } from 'src/common/constants';
-import { UserDocument } from '../user/user.interface';
+import { paginateAndSort } from '../../common/helpers';
+import { LeanUser, UserDocument } from '../user/user.interface';
+import { GetTransfersDto } from './dtos/GetTransfersDto';
 import { TransferDocument } from './interfaces/transfer.interface';
 import { Transfer } from './schemas/transfer.schema';
 
@@ -11,8 +13,7 @@ export class TransferService {
   constructor(
     @InjectModel(Transfer.name)
     public readonly transferModel: Model<TransferDocument>,
-  ) { }
-
+  ) {}
 
   public createTransfer(
     senderId: UserDocument['_id'],
@@ -31,13 +32,37 @@ export class TransferService {
   }
 
   async mostRecentMoneyReceived(userId: UserDocument['_id']) {
-
     const transfer = await this.transferModel
-      .find({ receiverId: userId }).sort({ createdAt: -1 }).exec();
+      .find({ receiverId: userId })
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (!transfer) {
       throw new BadRequestException(ErrorMessages.RECORD_NOT_FOUND);
     }
     return transfer;
+  }
+
+  async getTransfers(user: LeanUser, query: GetTransfersDto) {
+    const { sort, page, limit } = query;
+
+    console.log('user in transfer service', user);
+
+    const filters = {
+      senderId: user._id,
+    };
+
+    return paginateAndSort({
+      model: this.transferModel,
+      filters,
+      sort,
+      page,
+      limit,
+      populate: [
+        {
+          path: 'receiverId',
+        },
+      ],
+    });
   }
 }

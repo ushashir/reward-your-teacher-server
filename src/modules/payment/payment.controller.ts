@@ -1,6 +1,8 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { GetUser } from '../../common/decorators';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { LeanUser } from '../user/user.interface';
+import { GetPaymentsDto } from './dtos/GetPaymentsDto';
 import { InitializePaymentDto } from './dtos/InitializePaymentDto';
 import { VerifyPaymentDto } from './dtos/VerifyPaymentDto';
 import { PaymentService } from './payment.service';
@@ -23,5 +25,11 @@ export class PaymentController {
   @Post('/verify')
   verifyPayment(@GetUser() user, @Body() verifyPaymentDto: VerifyPaymentDto) {
     return this.paymentService.verifyPayment(user, verifyPaymentDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('successful')
+  async getPayments(@GetUser() user: LeanUser, @Query() query: GetPaymentsDto) {
+    return this.paymentService.getPayments(user, query);
   }
 }

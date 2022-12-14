@@ -1,21 +1,12 @@
-import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, Validate } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsEnum, IsOptional, Validate } from 'class-validator';
+import { PaginationDto } from '../../../common/dto';
 import { UserRolesEnum } from '../../../common/enums';
 import { SortQueryConstraint } from '../../../common/validations/sort.validation';
 
-export class GetUsersDto {
+export class GetUsersDto extends PaginationDto {
   @Validate(SortQueryConstraint, ['name', 'email', 'userType', 'createdAt'])
   sort?: string;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  limit?: number;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  page?: number;
 
   @IsOptional()
   name?: string;

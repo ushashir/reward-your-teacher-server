@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 import { DbSchemas } from '../../../common/constants';
-import { UserDocument } from '../../user/user.interface';
+import { User } from '../../user/schemas/user.schema';
 
 @Schema({
   timestamps: true,
@@ -12,14 +12,14 @@ export class Transfer {
     required: true,
     ref: DbSchemas.user,
   })
-  senderId: string | UserDocument; // student
+  senderId: string | User; // student
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     required: true,
     ref: DbSchemas.user,
   })
-  receiverId: string | UserDocument; // teacher
+  receiverId: string | User; // teacher
 
   @Prop({
     type: Number,
