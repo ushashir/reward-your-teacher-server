@@ -65,7 +65,7 @@ export const paginateAndSort = async <T>(params: PaginateAndSort<T>) => {
   }
 
   if (sort) {
-    const [key, order] = sort.split(':');
+    const [key, order] = sort.split(',');
 
     query.sort({ [key]: order as SortOrder });
   }

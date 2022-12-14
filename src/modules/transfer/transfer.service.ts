@@ -46,8 +46,6 @@ export class TransferService {
   async getTransfers(user: LeanUser, query: GetTransfersDto) {
     const { sort, page, limit } = query;
 
-    console.log('user in transfer service', user);
-
     const filters = {
       senderId: user._id,
     };
