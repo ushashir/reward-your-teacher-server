@@ -11,6 +11,7 @@ import { validateEnv } from './common/validations';
 import { AppreciationModule } from './modules/appreciation/appreciation.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/services/auth.service';
+import { DataModule } from './modules/data/data.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { TransferModule } from './modules/transfer/transfer.module';
 import { UserModule } from './modules/user/user.module';
@@ -33,6 +34,7 @@ import { WithdrawalModule } from './modules/withdrawal/withdrawal.module';
     TransferModule,
     AppreciationModule,
     WithdrawalModule,
+    DataModule,
   ],
   controllers: [AppController],
   providers: [

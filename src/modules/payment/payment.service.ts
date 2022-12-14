@@ -166,6 +166,7 @@ export class PaymentService {
 
     const filters = {
       status: PaymentStatusEnum.SUCCESS,
+      userId: user._id,
     };
 
     return paginateAndSort({

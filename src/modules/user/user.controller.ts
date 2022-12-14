@@ -19,9 +19,7 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService
-  ) { }
+  constructor(private readonly userService: UserService) {}
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update-me')
@@ -51,7 +49,13 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/student/:id')
-  getTotal(@Param("id") id: string) {
-    return this.userService.getStudent(id.toString())
+  getTotal(@Param('id') id: string) {
+    return this.userService.getStudent(id.toString());
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/school-teachers/:id')
+  getAllSchoolTeachers(@Param('id') schoolId: string) {
+    return this.userService.getAllSchoolTeachers(+schoolId);
   }
 }

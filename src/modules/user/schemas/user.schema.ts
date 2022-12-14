@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { CallbackWithoutResultAndOptionalError } from 'mongoose';
-import { GenderEnum, UserRolesEnum } from '../../../common/enums';
+import { UserRolesEnum } from '../../../common/enums';
 
 import * as bcrypt from 'bcryptjs';
 
@@ -32,27 +32,26 @@ export class User {
   })
   userType?: UserRolesEnum;
 
-  @Prop({
-    type: String,
-    enum: [GenderEnum.FEMALE, GenderEnum.MALE],
-    uppercase: true,
-  })
-  gender?: GenderEnum;
-
   @Prop()
   phoneNumber?: string;
 
   @Prop()
-  school?: string;
+  schoolId?: number;
 
   @Prop()
-  years?: string;
+  periodOfTeaching?: string;
 
   @Prop()
-  subject?: string;
+  subjects?: string[];
 
   @Prop()
   profilePicture?: string;
+
+  @Prop()
+  position?: string;
+
+  @Prop()
+  about?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

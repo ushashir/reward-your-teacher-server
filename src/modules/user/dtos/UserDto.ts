@@ -8,11 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import {
-  GenderEnum,
-  SchoolTypeEnum,
-  UserRolesEnum,
-} from '../../../common/enums';
+import { GenderEnum, UserRolesEnum } from '../../../common/enums';
 
 class BaseUserDto {
   @IsNotEmpty()
@@ -25,10 +21,6 @@ class BaseUserDto {
   @Transform(({ value }) => value.toUpperCase())
   @IsEnum(UserRolesEnum)
   userType?: UserRolesEnum;
-
-  @IsOptional()
-  @IsString()
-  school?: string;
 }
 
 export class CreateUserDto extends BaseUserDto {
@@ -55,13 +47,23 @@ export class UpdateUserDto extends BaseUserDto {
   phoneNumber?: number;
 
   @IsOptional()
-  years?: string;
+  periodOfTeaching?: string;
 
   @IsOptional()
-  subject?: string;
+  subjects?: string[];
 
   @IsOptional()
-  @Transform(({ value }) => value.toUpperCase())
-  @IsEnum(SchoolTypeEnum)
-  schoolType?: SchoolTypeEnum;
+  @IsString()
+  schoolId?: number;
+
+  @IsOptional()
+  profilePicture?: any;
+
+  @IsOptional()
+  @IsString()
+  position?: string;
+
+  @IsOptional()
+  @IsString()
+  about?: string;
 }
