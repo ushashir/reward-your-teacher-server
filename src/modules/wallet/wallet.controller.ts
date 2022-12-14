@@ -4,10 +4,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SendMoneyDto } from './dtos/SendMoneyDto';
 import { WalletService } from './wallet.service';
 
-
 @Controller('wallet')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) { }
+  constructor(private readonly walletService: WalletService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('/')
@@ -21,4 +20,3 @@ export class WalletController {
     return this.walletService.sendMoney(user, amount, destination);
   }
 }
-

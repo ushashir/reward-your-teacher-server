@@ -16,7 +16,7 @@ export class WalletService {
     private readonly walletModel: Model<WalletDocument>,
     private readonly transferService: TransferService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   async createWallet(userId: string, balance?: number): Promise<LeanWallet> {
     const wallet = await this.walletModel.create({
@@ -40,15 +40,18 @@ export class WalletService {
     const wallet = await this.walletModel.findOne({ userId: id });
     if (!wallet) {
       throw new BadRequestException(ErrorMessages.FAILED_TO_CREATE_WALLET);
-    };
+    }
 
-    const updateBalance = await this.walletModel.findOneAndUpdate({ userId: id }, { balance: newBalance }, {
-      new: true
-    });
+    const updateBalance = await this.walletModel.findOneAndUpdate(
+      { userId: id },
+      { balance: newBalance },
+      {
+        new: true,
+      },
+    );
 
-    return updateBalance
+    return updateBalance;
   }
-
 
   async sendMoney(user: UserDocument, amount: number, destination: string) {
     if (user.userType !== UserRolesEnum.STUDENT) {
@@ -60,7 +63,6 @@ export class WalletService {
     const receiverWallet = await this.getWalletByUserId(destination, {
       path: 'userId',
     });
-
 
     if (
       !senderWallet ||

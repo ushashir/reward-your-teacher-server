@@ -8,13 +8,13 @@ import { AllExceptionsFilter } from './common/exceptions/';
 import { MongoDbProviderModule } from './common/providers/database/mongo/mongodb.module';
 import { CronModule } from './common/services/cron/cron.module';
 import { validateEnv } from './common/validations';
+import { AppreciationModule } from './modules/appreciation/appreciation.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/services/auth.service';
 import { PaymentModule } from './modules/payment/payment.module';
+import { TransferModule } from './modules/transfer/transfer.module';
 import { UserModule } from './modules/user/user.module';
 import { WalletModule } from './modules/wallet/wallet.module';
-import { TransferModule } from './modules/transfer/transfer.module';
-import { AppreciationModule } from './modules/appreciation/appreciation.module';
 import { WithdrawalModule } from './modules/withdrawal/withdrawal.module';
 
 @Module({
@@ -32,7 +32,7 @@ import { WithdrawalModule } from './modules/withdrawal/withdrawal.module';
     PaymentModule,
     TransferModule,
     AppreciationModule,
-    WithdrawalModule
+    WithdrawalModule,
   ],
   controllers: [AppController],
   providers: [

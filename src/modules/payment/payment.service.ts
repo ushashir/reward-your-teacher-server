@@ -12,7 +12,6 @@ import { WalletService } from '../wallet/wallet.service';
 import { InitializePaymentDto } from './dtos/InitializePaymentDto';
 import { VerifyPaymentDto } from './dtos/VerifyPaymentDto';
 
-
 import {
   PaymentDocument,
   PaystackSuccess,
